@@ -35,6 +35,8 @@ button{cursor:pointer;background:none;border:0}
 .sp{flex:1}
 .kbtn{display:flex;align-items:center;gap:10px;min-width:260px;padding:7px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--p1);color:var(--mut);transition:.15s}
 .kbtn:hover{border-color:var(--bd2);color:var(--tx)}
+.sugbtn{background: rgba(74,222,158,.1); color: var(--ac); border: 1px solid rgba(74,222,158,.25); min-width: auto;}
+.sugbtn:hover{background: rgba(74,222,158,.15); border-color: rgba(74,222,158,.4); color: var(--ac);}
 kbd{font-family:var(--mono);font-size:11px;padding:1px 6px;border:1px solid var(--bd2);border-radius:5px;background:var(--p2);color:var(--mut);margin-inline-start:auto;direction:ltr}
 .lnk{color:var(--mut);text-decoration:none;padding:6px 10px;border-radius:8px}
 .lnk:hover{color:var(--tx);background:var(--p2)}
@@ -110,13 +112,22 @@ kbd{font-family:var(--mono);font-size:11px;padding:1px 6px;border:1px solid var(
 .pal{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:flex;justify-content:center;padding-top:14vh}
 .pal[hidden]{display:none}
 .pb{width:min(580px,92vw);height:fit-content;background:var(--p1);border:1px solid var(--bd2);border-radius:16px;overflow:hidden;box-shadow:0 40px 100px -20px #000}
-.pb input{width:100%;padding:16px 20px;background:none;border:0;border-bottom:1px solid var(--bd);outline:0;font-size:16px}
+.pb input.search-input{width:100%;padding:16px 20px;background:none;border:0;border-bottom:1px solid var(--bd);outline:0;font-size:16px}
 .pr{max-height:340px;overflow:auto;padding:8px}
 .pi{display:flex;gap:10px;align-items:center;width:100%;text-align:start;padding:10px 12px;border-radius:9px}
 .pi.on{background:var(--p3)}
 .pi small{color:var(--dim);margin-inline-start:auto}
 
-#toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,12px);background:var(--p3);border:1px solid var(--bd2);color:var(--ac);padding:9px 18px;border-radius:10px;opacity:0;pointer-events:none;transition:.2s;z-index:60}
+/* تنسيقات نافذة الاقتراح */
+.sug-form{display:flex;flex-direction:column;gap:14px;padding:24px;}
+.sug-form h2{font-size:18px;margin-bottom:8px;font-weight:600;}
+.sug-form p{color:var(--dim);font-size:13px;margin-bottom:16px;}
+.sug-form input, .sug-form textarea{width:100%;padding:10px 14px;background:var(--bg);border:1px solid var(--bd);border-radius:8px;outline:0;font-size:14.5px;color:var(--tx);transition:.15s;font-family:inherit}
+.sug-form input:focus, .sug-form textarea:focus{border-color:rgba(74,222,158,.5);box-shadow:0 0 0 3px var(--ac2)}
+.sug-form textarea{resize:vertical;min-height:100px}
+.sug-actions{display:flex;gap:12px;margin-top:8px;}
+
+#toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,12px);background:var(--p3);border:1px solid var(--bd2);color:var(--ac);padding:9px 18px;border-radius:10px;opacity:0;pointer-events:none;transition:.2s;z-index:60;box-shadow:0 10px 30px rgba(0,0,0,.5)}
 #toast.s{opacity:1;transform:translate(-50%,0)}
 
 @media(max-width:960px){
@@ -126,6 +137,7 @@ kbd{font-family:var(--mono);font-size:11px;padding:1px 6px;border:1px solid var(
   .detail{position:fixed;inset:54px 0 0 0;z-index:20;background:var(--bg);display:none;padding:20px 18px 60px}
   .detail.open{display:block}.back{display:block}
   .kbtn{min-width:0;flex:1}.kbtn kbd,.lnk{display:none}.hint{display:none}
+  .sugbtn{padding:7px;} .sugbtn span{display:none;}
 }
 </style>
 </head>
@@ -134,6 +146,7 @@ kbd{font-family:var(--mono);font-size:11px;padding:1px 6px;border:1px solid var(
 <header class="top">
   <div class="logo"><div class="mark">س</div>سِياق</div>
   <div class="sp"></div>
+  <button class="kbtn sugbtn" id="open-suggest">💡 <span>اقترح برومبت</span></button>
   <button class="kbtn" id="open-pal">⌕ <span>ابحث في المكتبة…</span><kbd>Ctrl K</kbd></button>
   <a class="lnk" href="https://github.com/khly500/suyaq-ai" target="_blank" rel="noopener">GitHub</a>
 </header>
@@ -150,12 +163,33 @@ kbd{font-family:var(--mono);font-size:11px;padding:1px 6px;border:1px solid var(
   <article class="detail" id="detail"></article>
 </div>
 
+<!-- نافذة البحث -->
 <div class="pal" id="pal" hidden>
   <div class="pb">
-    <input id="pi" placeholder="ابحث عن برومبت أو كود…" autocomplete="off">
+    <input class="search-input" id="pi" placeholder="ابحث عن برومبت أو كود…" autocomplete="off">
     <div class="pr" id="pr"></div>
   </div>
 </div>
+
+<!-- نافذة اقتراح برومبت -->
+<div class="pal" id="sug-pal" hidden>
+  <div class="pb">
+    <form class="sug-form" id="sug-form">
+      <h2>💡 شاركنا برومبت أو كود</h2>
+      <p>سيتم مراجعة اقتراحك وإضافته للمكتبة لتعم الفائدة للجميع.</p>
+      
+      <input type="text" name="title" placeholder="عنوان البرومبت (مثال: مساعد برمجة بايثون)" required>
+      <input type="text" name="author" placeholder="اسمك أو حسابك (اختياري - لحفظ حقوقك)">
+      <textarea name="content" placeholder="اكتب البرومبت أو الكود هنا..." required></textarea>
+      
+      <div class="sug-actions">
+        <button type="submit" class="cp" style="flex:1; padding:12px; font-size:14.5px;" id="sug-submit">إرسال الاقتراح</button>
+        <button type="button" class="fmt" style="padding:12px 24px;" id="sug-close">إلغاء</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script src="data.js"></script>
@@ -163,7 +197,7 @@ kbd{font-family:var(--mono);font-size:11px;padding:1px 6px;border:1px solid var(
 const $=id=>document.getElementById(id);
 const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const norm=s=>s.replace(/[\u064B-\u0652\u0640]/g,'').replace(/[إأآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').toLowerCase();
-const toast=m=>{const t=$('toast');t.textContent=m;t.className='s';clearTimeout(toast.t);toast.t=setTimeout(()=>t.className='',1500)};
+const toast=m=>{const t=$('toast');t.textContent=m;t.className='s';clearTimeout(toast.t);toast.t=setTimeout(()=>t.className='',2500)};
 
 const st={type:'prompt',cat:'الكل',q:'',sel:null,fmt:'text',vals:{},fav:JSON.parse(localStorage.fav||'[]')};
 const TYPES={prompt:'برومبتات',code:'أكواد'};
@@ -324,9 +358,35 @@ pal.onclick=e=>{if(e.target===pal)pal.hidden=true};
 $('open-pal').onclick=openPal;
 $('flt').oninput=e=>{st.q=e.target.value;go()};
 
+// كود التعامل مع نافذة اقتراح برومبت وإرسال البيانات
+const sugPal=$('sug-pal'), sugForm=$('sug-form'), sugBtn=$('sug-submit');
+$('open-suggest').onclick=()=>{sugPal.hidden=false; sugForm.reset(); sugForm.querySelector('input').focus();};
+$('sug-close').onclick=()=>{sugPal.hidden=true;};
+sugPal.onclick=e=>{if(e.target===sugPal)sugPal.hidden=true};
+
+sugForm.onsubmit=async(e)=>{
+  e.preventDefault();
+  sugBtn.textContent='جاري الإرسال...';
+  sugBtn.style.opacity='0.6';
+  try {
+    const fd = new FormData(sugForm);
+    await fetch('https://formspree.io/f/maeevapb', {
+      method: 'POST',
+      body: fd,
+      headers: { 'Accept': 'application/json' }
+    });
+    toast('✓ تم إرسال اقتراحك بنجاح! شكراً لك.');
+    sugPal.hidden=true;
+  } catch(err) {
+    toast('حدث خطأ بالاتصال، يرجى المحاولة لاحقاً.');
+  }
+  sugBtn.textContent='إرسال الاقتراح';
+  sugBtn.style.opacity='1';
+};
+
 addEventListener('keydown',e=>{
   if((e.ctrlKey||e.metaKey)&&e.code==='KeyK'){e.preventDefault();openPal();return}
-  if(!pal.hidden)return;
+  if(!pal.hidden || !sugPal.hidden)return;
   const tag=document.activeElement.tagName;
   if(tag==='INPUT'||tag==='TEXTAREA'){if(e.key==='Escape')document.activeElement.blur();return}
   if(e.code==='Slash'){e.preventDefault();$('flt').focus();return}
