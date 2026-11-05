@@ -1,0 +1,36 @@
+﻿name: 💡 اقتراح برومبت/كود جديد
+description: أضف برومبت أو كود جديد لمكتبة سِياق
+title: '[اقتراح]: '
+labels: ['prompt-suggestion', 'needs-review']
+body:
+  - type: markdown
+    attributes: { value: 'شكراً لمساهمتك في سِياق! 🎉\nاملأ النموذج أدناه وسيتم مراجعة اقتراحك وإضافته للمكتبة.' }
+  - type: dropdown
+    id: type
+    attributes: { label: نوع المساهمة, options: ['🎯 برومبت (Prompt)', '💻 كود (Code Snippet)', '🐛 إصلاح برومبت موجود', '📝 تحسين توثيق/وصف'] }
+    validations: { required: true }
+  - type: input
+    id: title
+    attributes: { label: عنوان البرومبت/الكود, placeholder: 'مثال: مراجعة كود أمان، تحويل تاريخ هجري، كتابة بريد اعتذار' }
+    validations: { required: true }
+  - type: dropdown
+    id: category
+    attributes: { label: التصنيف, options: ['برمجة', 'كتابة', 'لهجات', 'بيانات', 'تعليم', 'أعمال', 'تسويق', 'بحث', 'ترجمة', 'معالجة بيانات', 'عربية'] }
+    validations: { required: true }
+  - type: input
+    id: language
+    attributes: { label: اللغة (للكود فقط), placeholder: 'Python, JavaScript, TypeScript, SQL, Bash...', description: 'اتركه فارغاً للبرومبتات' }
+  - type: textarea
+    id: description
+    attributes: { label: وصف مختصر, placeholder: 'يحلل الكود ويحدد ثغرات الأمان، مشاكل الأداء، ويقترح تحسينات...' }
+    validations: { required: true }
+  - type: textarea
+    id: body
+    attributes: { label: نص البرومبت/الكود الكامل, description: 'للبرومبت: استخدم {{المتغير}} للمتغيرات.\nللكود: اكتب الكود كاملاً مع التعليقات.', placeholder: 'أنت خبير في...\nقم بـ...\nالمتغيرات: {{المدخل}}، {{اللغة}}', render: markdown }
+    validations: { required: true }
+  - type: textarea
+    id: variables
+    attributes: { label: المتغيرات المستخدمة (للبرومبتات فقط), placeholder: 'المدخل: الكود المراد مراجعته\nاللغة: لغة البرمجة (اختياري)', description: 'اذكر كل متغير {{اسم}} ووصفه' }
+  - type: checkboxes
+    id: checklist
+    attributes: { label: قائمة تحقق, options: [{ label: 'اختبرت البرومبت/الكود ويعمل بشكل صحيح', required: true }, { label: 'النص بالعربية الفصحى السليمة', required: true }, { label: 'لا يحتوي على معلومات حساسة أو مفاتيح API', required: true }, { label: 'التصنيف صحيح والمتغيرات محددة بوضوح', required: true }] }
