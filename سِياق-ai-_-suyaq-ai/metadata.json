@@ -1,6 +1,0 @@
-{
-  "name": "سِياق AI | Suyaq AI — البنية المعيارية لمطوري الذكاء الاصطناعي في العالم العربي",
-  "description": "منصة هندسية مرجعية لمطوري الذكاء الاصطناعي باللغة العربية: مؤشر الأداء المعياري للنماذج اللغوية، مستودع التوجيهات الهندسية، وقوالب البيانات المهيكلة JSON-LD وGEO.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
