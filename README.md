@@ -2,7 +2,8 @@
 
 > برومبتات وأكواد عربية جاهزة للذكاء الاصطناعي، بصيغ جاهزة للـ API.
 
-[![GitHub stars](https://img.shields.io/github/stars/khly500/suyaq-reference?style=social)](https://github.com/YOUR_USERNAME/YOUR_REPO/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/khly500/suyaq-reference?style=social)](https://github.com/khly500/suyaq-reference/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/khly500/suyaq-reference?style=social)](https://github.com/khly500/suyaq-reference/network/members)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Arabic](https://img.shields.io/badge/language-Arabic-green)](https://ai.skakh.com)
 
