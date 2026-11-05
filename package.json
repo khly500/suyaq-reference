@@ -1,6 +1,25 @@
 {
-  "name": "suyaq-v2",
+  "name": "suyaq-reference",
+  "version": "2.0.0",
+  "private": true,
+  "workspaces": [ "astro-project" ],
   "scripts": {
-    "build": "echo Done"
-  }
+    "dev": "npm run dev --workspace=astro-project",
+    "build": "npm run build --workspace=astro-project",
+    "preview": "npm run preview --workspace=astro-project",
+    "validate": "npm run validate --workspace=astro-project",
+    "lint": "npm run lint --workspace=astro-project",
+    "format": "npm run format --workspace=astro-project",
+    "sync-data": "node scripts/sync-to-astro.mjs",
+    "prepare": "husky install",
+    "release": "standard-version"
+  },
+  "devDependencies": {
+    "husky": "^9.0.0",
+    "standard-version": "^9.5.0",
+    "@commitlint/cli": "^19.0.0",
+    "@commitlint/config-conventional": "^19.0.0"
+  },
+  "engines": { "node": ">=18.17.0" },
+  "packageManager": "npm@10.5.0"
 }
