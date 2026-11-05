@@ -1,66 +1,62 @@
-# سِياق (Siyaq) — مرجع المطور العربي للذكاء الاصطناعي
+<p align="center">
+  <img src="https://raw.githubusercontent.com/khly500/suyaq-reference/main/astro-project/public/favicon.svg" alt="سِياق Logo" width="120" height="120">
+</p>
 
-> برومبتات وأكواد عربية جاهزة للذكاء الاصطناعي، بصيغ جاهزة للـ API.
+<h1 align="center">سِياق (Siyaq)</h1>
+<p align="center"><strong>مرجع المطور العربي للذكاء الاصطناعي</strong></p>
+<p align="center">برومبتات وأكواد عربية جاهزة للـ API، بصيغ متعددة، مفتوحة المصدر ومجانية للأبد.</p>
 
-[![GitHub stars](https://img.shields.io/github/stars/khly500/suyaq-reference?style=social)](https://github.com/khly500/suyaq-reference/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/khly500/suyaq-reference?style=social)](https://github.com/khly500/suyaq-reference/network/members)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Arabic](https://img.shields.io/badge/language-Arabic-green)](https://ai.skakh.com)
+<p align="center">
+  <a href="https://ai.skakh.com"><strong>🌐 الموقع الرسمي</strong></a> •
+  <a href="https://github.com/khly500/suyaq-reference/discussions">💬 المجتمع</a> •
+  <a href="https://github.com/khly500/suyaq-reference/blob/main/CONTRIBUTING.md">🤝 ساهم</a> •
+  <a href="https://github.com/khly500/suyaq-reference/releases">📦 الإصدارات</a>
+</p>
 
-🌐 **الموقع الرسمي:** [ai.skakh.com](https://ai.skakh.com)
+<p align="center">
+  <img src="https://img.shields.io/github/stars/khly500/suyaq-reference?style=flat-square&logo=github" alt="Stars">
+  <img src="https://img.shields.io/github/forks/khly500/suyaq-reference?style=flat-square&logo=github" alt="Forks">
+  <img src="https://img.shields.io/github/issues/khly500/suyaq-reference?style=flat-square&logo=github" alt="Issues">
+  <img src="https://img.shields.io/github/last-commit/khly500/suyaq-reference?style=flat-square&logo=github" alt="Last Commit">
+  <img src="https://img.shields.io/github/license/khly500/suyaq-reference?style=flat-square" alt="License">
+  <img src="https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square&logo=github" alt="PRs Welcome">
+  <img src="https://img.shields.io/badge/Arabic-RTL-green?style=flat-square" alt="Arabic RTL">
+</p>
 
 ---
 
-## 📖 عن المشروع
+## 🎯 لماذا سِياق؟
 
-سِياق هو مرجع مفتوح ومجاني للمطورين والمهتمين بالذكاء الاصطناعي باللغة العربية. يوفر مكتبة من البرومبتات (Prompts) والأكواد الجاهزة التي يمكن نسخها واستخدامها مباشرة مع أي نموذج ذكاء اصطناعي مثل GPT، Claude، Gemini.
+| المشكلة | حل سِياق |
+|----------|-----------|
+| البرومبتات العربية مبعثرة وغير مختبرة | **مكتبة منسقة، مختبرة، بصيغ جاهزة للـ API** |
+| نسخ البرومبت يدوياً وتعديل المتغيرات | **نسخ بصيغ متعددة (Text, Messages, Python, cURL) بزر واحد** |
+| لا توجد أمثلة أو توثيق للبرومبتات | **كل برومبت: وصف، متغيرات، أمثلة، برومبتات ذات صلة** |
+| الموقع لا يظهر في Google | **SSG + SEO مثالي: Sitemap، JSON-LD، Open Graph، RSS** |
+| صعب المساهمة وإضافة برومبتات جديدة | **GitHub PR flow مع CI آلي، قوالب عربية، مراجعة سريعة** |
+| لا يمكن الاستخدام من محرر الكود | **VS Code Extension (قادم) + Browser Extension (قادم)** |
 
 ---
 
 ## ✨ المميزات
 
 | الميزة | الوصف |
-|--------|-------|
-| 📚 **41 برومبت مصنف** | برمجة، كتابة، بيانات، تعليم، أعمال، تسويق، بحث |
-| 💻 **53 كود جاهز** | Snippets بلغة Python و JavaScript |
-| 🔍 **بحث داخلي** | البحث السريع في البرومبتات والأكواد |
-| ⭐ **مفضلة** | إضافة البرومبتات المفضلة عبر زر النجمة |
-| 📋 **نسخ سريع** | زر نسخ مباشر لكل برومبت أو كود |
-| 🌙 **واجهة داكنة** | تصميم مريح للعين ومناسب للعمل الطويل |
+|--------|--------|
+| 🎯 **77+ برومبت** | مصنفة: برمجة، كتابة، لهجات، بيانات، تعليم، أعمال، تسويق، بحث، ترجمة، معالجة بيانات، عربية |
+| 💻 **53+ كود** | Snippets عملية: Python، JavaScript، TypeScript، SQL، Bash — جاهزة للنسخ واللصق |
+| 🔍 **بحث فوري** | FlexSearch جانب العميل — يبحث في العنوان، الوصف، التصنيف، المتغيرات، الكود |
+| 📋 **نسخ ذكي** | 4 صيغ للبرومبتات (نص، Messages، Python OpenAI، cURL) + نسخ مباشر للكود |
+| ⭐ **مفضلة محلية** | حفظ البرومبتات في `localStorage` — تعمل أوفلاين |
+| ⚡ **Live Mode** | تنفيذ أكواد JavaScript/Python مباشرة في المتصفح (Pyodide) |
+| 🌙 **داكنة افتراضياً** | تصميم مريح للعين، RTL صحيح، متجاوب بالكامل |
+| ♿ **إمكانية وصول** | اختصارات لوحة مفاتيح، ARIA، تباين ألوان، semantic HTML |
+| 🌐 **SEO مثالي** | صفحات ثابتة لكل برومبت، Sitemap، RSS، JSON-LD، Rich Snippets |
+| 🔗 **روابط دائمة** | `/prompts/review/`، `/codes/c1/` — قابلة للمشاركة والفهرسة |
 
 ---
 
-## 🚀 كيف تبدأ
+## 🚀 البدء السريع
 
-1. افتح الموقع: [https://ai.skakh.com](https://ai.skakh.com)
-2. من القائمة الجانبية، اختر التصنيف المناسب.
-3. اختر البرومبت أو الكود واضغط زر **نسخ**.
-4. الصق النص في أداة الذكاء الاصطناعي واستبدل `{{المدخل}}` بنصك.
-
----
-
-## 🤝 كيف تساهم
-
-نرحب بكل مساهمة! إذا عندك برومبت جديد أو تحسين:
-
-1. افتح **Issue** لاقتراح فكرة.
-2. عمل **Fork** للمستودع، ثم أضف تعديلاتك.
-3. أرسل **Pull Request**.
-
----
-
-## 📄 الترخيص
-
-هذا المشروع مرخص تحت رخصة **MIT**.
-
----
-
-## 🙏 شكر
-
-صُنع بـ ❤️ للمطور العربي.
-
-[**زور الموقع الآن** → ai.skakh.com](https://ai.skakh.com)
-
-## 🖼️ معاينة المشروع
-
-![سِياق](screenshot.png)
+### للمستخدمين
+```bash
+open https://ai.skakh.com
