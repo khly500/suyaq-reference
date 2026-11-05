@@ -1,0 +1,1 @@
+﻿{ "name": "سِياق — مرجع المطور العربي للذكاء الاصطناعي", "short_name": "سِياق", "description": "برومبتات وأكواد عربية جاهزة للـ API", "start_url": "/", "display": "standalone", "background_color": "#09090b", "theme_color": "#4ade80", "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }], "lang": "ar", "dir": "rtl" }
