@@ -1,2 +1,0 @@
-﻿import rss from '@astrojs/rss'; import { PROMPTS } from '../data/prompts.js';
-export async function GET(context){const p=PROMPTS.filter(x=>x.type==='prompt').slice(0,50);return rss({title:'سِياق — أحدث البرومبتات',description:'برومبتات عربية جاهزة للـ API، تُحدّث أسبوعياً',site:context.site,items:p.map(x=>({title:x.title,link:/prompts//,description:x.description||x.body.slice(0,200),pubDate:new Date(),categories:[x.cat,...(x.variables||[])],guid:x.id})),customData:'<language>ar-SA</language>',stylesheet:'/rss.xsl'});}

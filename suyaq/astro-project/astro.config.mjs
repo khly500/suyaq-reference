@@ -1,2 +1,0 @@
-﻿import { defineConfig } from 'astro/config'; import sitemap from '@astrojs/sitemap';
-export default defineConfig({ site: 'https://ai.skakh.com', output: 'static', trailingSlash: 'always', compressHTML: true, integrations: [sitemap({ serialize(item){ return {...item, changefreq: 'weekly', priority: item.url==='https://ai.skakh.com/'?1.0:0.8, lastmod: new Date()}; }})], vite: { build: { cssCodeSplit: true, minify: 'esbuild' } } });
