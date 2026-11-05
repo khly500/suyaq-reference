@@ -165,8 +165,6 @@ const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&qu
 const norm=s=>s.replace(/[\u064B-\u0652\u0640]/g,'').replace(/[إأآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').toLowerCase();
 const toast=m=>{const t=$('toast');t.textContent=m;t.className='s';clearTimeout(toast.t);toast.t=setTimeout(()=>t.className='',1500)};
 
-DATA.forEach(d=>{d.desc=d.desc||(d.type==='prompt'?d.body.split('\n')[0]:d.lang+' · '+d.title)});
-
 const st={type:'prompt',cat:'الكل',q:'',sel:null,fmt:'text',vals:{},fav:JSON.parse(localStorage.fav||'[]')};
 const TYPES={prompt:'برومبتات',code:'أكواد'};
 
@@ -345,5 +343,12 @@ addEventListener('keydown',e=>{
   if(d&&innerWidth<=960)$('detail').classList.add('open');
 })();
 </script>
+
+<footer style="text-align: center; padding: 20px; margin-top: 40px; border-top: 1px solid #27272a; color: #a1a1aa; font-family: 'IBM Plex Sans Arabic', sans-serif; font-size: 14px; direction: rtl;">
+  تطوير: <span style="color: #e5e7eb; font-weight: bold;">Khal!l</span> | 
+  <a href="https://skakh.com" target="_blank" style="color: #a1a1aa; text-decoration: none;">موقع سكاكا سوفت</a> | 
+  <a href="mailto:info@skakh.com" style="color: #a1a1aa; text-decoration: none;">info@skakh.com</a>
+</footer>
+
 </body>
 </html>
