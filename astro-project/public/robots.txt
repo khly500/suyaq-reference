@@ -1,5 +1,0 @@
-﻿# robots.txt for ai.skakh.com
-User-agent: *
-Allow: /
-Sitemap: https://ai.skakh.com/sitemap-index.xml
-Crawl-delay: 10
