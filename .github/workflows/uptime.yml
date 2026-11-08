@@ -1,0 +1,45 @@
+name: مراقبة الموقع
+on:
+  schedule:
+    - cron: '17 */3 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: فحص الصفحات الأساسية
+        id: probe
+        run: |
+          fail=0
+          for u in / /about/ /privacy/ /p/pr-review/ /c/ai/ /api/v1/snippets.json /sitemap.xml /data.js; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 --retry 2 --retry-delay 5 "https://ai.skakh.com$u" || echo 000)
+            echo "$u -> $code"
+            if [ "$code" != "200" ]; then fail=1; echo "- $u => $code" >> "$RUNNER_TEMP/failed.txt"; fi
+          done
+          echo "fail=$fail" >> "$GITHUB_OUTPUT"
+      - name: فتح بلاغ عند وجود عطل
+        if: steps.probe.outputs.fail == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          existing=$(gh issue list -R "$GITHUB_REPOSITORY" --label uptime --state open --json number --jq '.[0].number')
+          body="تعذّر الوصول لبعض صفحات ai.skakh.com:"$'\n\n'"$(cat "$RUNNER_TEMP/failed.txt")"$'\n\n'"$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          if [ -z "$existing" ]; then
+            gh label create uptime -R "$GITHUB_REPOSITORY" --color D93F0B 2>/dev/null || true
+            gh issue create -R "$GITHUB_REPOSITORY" --title "⚠️ عطل في الموقع" --label uptime --body "$body"
+          else
+            gh issue comment "$existing" -R "$GITHUB_REPOSITORY" --body "$body"
+          fi
+          exit 1
+      - name: إغلاق البلاغ بعد عودة الموقع
+        if: steps.probe.outputs.fail == '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for n in $(gh issue list -R "$GITHUB_REPOSITORY" --label uptime --state open --json number --jq '.[].number'); do
+            gh issue close "$n" -R "$GITHUB_REPOSITORY" --comment "عاد الموقع للعمل ✅"
+          done
