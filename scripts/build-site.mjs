@@ -22,24 +22,24 @@ const clip = (s, n) => { s = s.replace(/\s+/g, ' ').trim(); return s.length <= n
 
 // slug لكل تصنيف
 const CATS = {
-  'برمجة': 'programming', 'كتابة': 'writing', 'لهجات': 'dialects', 'بيانات': 'data',
-  'تعليم': 'education', 'أعمال': 'business', 'تسويق': 'marketing', 'بحث': 'research',
-  'معالجة النص': 'text-processing', 'أرقام وتواريخ': 'numbers-dates',
-  'ملفات وبيانات': 'files-data', 'أدوات مساعدة': 'utilities',
+'برمجة': 'programming', 'كتابة': 'writing', 'لهجات': 'dialects', 'بيانات': 'data',
+'تعليم': 'education', 'أعمال': 'business', 'تسويق': 'marketing', 'بحث': 'research',
+'معالجة النص': 'text-processing', 'أرقام وتواريخ': 'numbers-dates',
+'ملفات وبيانات': 'files-data', 'أدوات مساعدة': 'utilities',
 };
 const slugOf = (c) => CATS[c] || encodeURIComponent(c);
 
 DATA.forEach((d) => {
-  d.desc = d.desc || (d.type === 'prompt' ? d.body.split('\n')[0] : `${d.lang} · ${d.title}`);
-  d.url = `/p/${d.id}/`;
-  d.kind = d.type === 'prompt' ? 'برومبت' : `كود ${d.lang}`;
+d.desc = d.desc || (d.type === 'prompt' ? d.body.split('\n')[0] : `${d.lang} · ${d.title}`);
+d.url = `/p/${d.id}/`;
+d.kind = d.type === 'prompt' ? 'برومبت' : `كود ${d.lang}`;
 });
 const ids = new Set(); DATA.forEach((d) => { if (ids.has(d.id)) throw new Error('معرّف مكرر: ' + d.id); ids.add(d.id); });
 
 const write = (rel, content) => {
-  const f = path.join(DIST, rel);
-  fs.mkdirSync(path.dirname(f), { recursive: true });
-  fs.writeFileSync(f, content, 'utf8');
+const f = path.join(DIST, rel);
+fs.mkdirSync(path.dirname(f), { recursive: true });
+fs.writeFileSync(f, content, 'utf8');
 };
 
 const head = ({ title, description, path: p, type = 'website', ld = [] }) => `<meta charset="utf-8">
@@ -75,8 +75,8 @@ let app = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').replace(/^\uFEF
 const homeTitle = `${NAME} — ${TAGLINE}`;
 const homeDesc = `${DATA.length} برومبتاً وكوداً عربياً جاهزاً للنسخ والتجربة: مراجعة كود، تلخيص، لهجات، SQL، معالجة النص العربي وأكثر. مجاناً ومفتوح المصدر.`;
 const homeLd = [
-  { '@context': 'https://schema.org', '@type': 'WebSite', name: NAME, alternateName: 'Suyaq', url: SITE + '/', inLanguage: 'ar', description: homeDesc, publisher: { '@type': 'Person', name: 'Khalil Alshamardal' } },
-  { '@context': 'https://schema.org', '@type': 'CollectionPage', name: homeTitle, url: SITE + '/', inLanguage: 'ar', hasPart: DATA.slice(0, 20).map((d) => ({ '@type': 'CreativeWork', name: d.title, url: SITE + d.url })) },
+{ '@context': 'https://schema.org', '@type': 'WebSite', name: NAME, alternateName: 'Suyaq', url: SITE + '/', inLanguage: 'ar', description: homeDesc, publisher: { '@type': 'Person', name: 'Khalil Alshamardal' } },
+{ '@context': 'https://schema.org', '@type': 'CollectionPage', name: homeTitle, url: SITE + '/', inLanguage: 'ar', hasPart: DATA.slice(0, 20).map((d) => ({ '@type': 'CreativeWork', name: d.title, url: SITE + d.url })) },
 ];
 app = app.replace(/<meta charset="utf-8">\s*<meta name="viewport"[^>]*>\s*<title>[\s\S]*?<meta name="description"[^>]*>/, head({ title: homeTitle, description: homeDesc, path: '/', ld: homeLd }));
 app = app.replace('href="https://github.com/khly500/suyaq-ai"', `href="${REPO}"`);
@@ -112,56 +112,84 @@ ${FONT}
 <main>
 ${body}
 </main>
-<footer>${NAME} — ${TAGLINE} · مجاني ومفتوح المصدر (MIT) · <a href="${REPO}" rel="noopener">GitHub</a> · <a href="/rss.xml">RSS</a></footer>
+<footer>${NAME} — ${TAGLINE} · مجاني ومفتوح المصدر (MIT) · <a href="${REPO}" rel="noopener">GitHub</a> · <a href="/rss.xml">RSS</a> · <a href="/api/">API</a></footer>
 </body>
 </html>`;
 
 // ---------- صفحة لكل عنصر ----------
 for (const d of DATA) {
-  const related = DATA.filter((x) => x.cat === d.cat && x.id !== d.id).slice(0, 6);
-  const isP = d.type === 'prompt';
-  const vars = isP ? [...new Set([...d.body.matchAll(/\{\{(.+?)\}\}/g)].map((m) => m[1]))] : [];
-  const title = `${d.title} — ${isP ? 'برومبت عربي جاهز' : `كود ${d.lang} جاهز`} | ${NAME}`;
-  const description = clip(`${d.title}: ${isP ? 'برومبت عربي جاهز للنسخ والتجربة. ' : `كود ${d.lang} جاهز للنسخ. `}${d.desc}`, 158);
-  const ld = [
-    { '@context': 'https://schema.org', '@type': isP ? 'CreativeWork' : 'SoftwareSourceCode', name: d.title, description: d.desc, inLanguage: 'ar', url: SITE + d.url, genre: d.cat, ...(isP ? { text: d.body } : { programmingLanguage: d.lang, codeSampleType: 'snippet', text: d.body }), isPartOf: { '@type': 'WebSite', name: NAME, url: SITE + '/' }, author: { '@type': 'Person', name: 'Khalil Alshamardal' }, license: 'https://opensource.org/licenses/MIT' },
-    { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
-      { '@type': 'ListItem', position: 1, name: NAME, item: SITE + '/' },
-      { '@type': 'ListItem', position: 2, name: d.cat, item: `${SITE}/c/${slugOf(d.cat)}/` },
-      { '@type': 'ListItem', position: 3, name: d.title, item: SITE + d.url } ] },
-  ];
-  const body = `<div class="crumb"><a href="/">${NAME}</a> / <a href="/c/${slugOf(d.cat)}/">${esc(d.cat)}</a></div>
+const related = DATA.filter((x) => x.cat === d.cat && x.id !== d.id).slice(0, 6);
+const isP = d.type === 'prompt';
+const vars = isP ? [...new Set([...d.body.matchAll(/\{\{(.+?)\}\}/g)].map((m) => m[1]))] : [];
+const title = `${d.title} — ${isP ? 'برومبت عربي جاهز' : `كود ${d.lang} جاهز`} | ${NAME}`;
+const description = clip(`${d.title}: ${isP ? 'برومبت عربي جاهز للنسخ والتجربة. ' : `كود ${d.lang} جاهز للنسخ. `}${d.desc}`, 158);
+const ld = [
+{ '@context': 'https://schema.org', '@type': isP ? 'CreativeWork' : 'SoftwareSourceCode', name: d.title, description: d.desc, inLanguage: 'ar', url: SITE + d.url, genre: d.cat, ...(isP ? { text: d.body } : { programmingLanguage: d.lang, codeSampleType: 'snippet', text: d.body }), isPartOf: { '@type': 'WebSite', name: NAME, url: SITE + '/' }, author: { '@type': 'Person', name: 'Khalil Alshamardal' }, license: 'https://opensource.org/licenses/MIT' },
+...(isP ? [{ '@context': 'https://schema.org', '@type': 'HowTo', name: `كيف تستخدم برومبت «${d.title}»`, description: d.desc, inLanguage: 'ar', step: [
+{ '@type': 'HowToStep', position: 1, name: 'املأ المتغيرات', text: vars.length ? `أدخل قيم: ${vars.join('، ')}.` : 'راجع نص البرومبت وعدّله حسب حاجتك.' },
+{ '@type': 'HowToStep', position: 2, name: 'انسخ البرومبت', text: 'اضغط زر النسخ أو المفتاح C.' },
+{ '@type': 'HowToStep', position: 3, name: 'الصقه في نموذج الذكاء الاصطناعي', text: 'الصق النص في ChatGPT أو Claude أو Gemini وأرسله.' } ] }] : []),
+{ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+{ '@type': 'ListItem', position: 1, name: NAME, item: SITE + '/' },
+{ '@type': 'ListItem', position: 2, name: d.cat, item: `${SITE}/c/${slugOf(d.cat)}/` },
+{ '@type': 'ListItem', position: 3, name: d.title, item: SITE + d.url } ] },
+];
+const body = `<div class="crumb"><a href="/">${NAME}</a> / <a href="/c/${slugOf(d.cat)}/">${esc(d.cat)}</a></div>
 <h1>${esc(d.title)}</h1>
 <div><span class="pill">${esc(d.kind)}</span><span class="pill">${esc(d.cat)}</span></div>
 <p class="lead">${esc(d.desc)}</p>
-<pre id="body" class="${isP ? 'ar' : ''}"><code>${esc(d.body)}</code></pre>
+${vars.length ? `<h2>املأ المتغيرات</h2><style>.vf{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:0 0 18px}.vf label{display:block;font-size:13px;margin-bottom:4px;opacity:.8}.vf textarea{width:100%;box-sizing:border-box;font:inherit;background:transparent;color:inherit;border:1px solid rgba(128,128,128,.4);border-radius:9px;padding:8px 12px}#toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,12px);background:#17171c;border:1px solid #2a2a33;color:#4ade9e;padding:9px 18px;border-radius:10px;opacity:0;pointer-events:none;transition:.2s}#toast.s{opacity:1;transform:translate(-50%,0)}</style><div class="vf" id="vf">${vars.map((v, i) => `<div><label for="v${i}">${esc(v)}</label><textarea id="v${i}" data-k="${esc(v)}" rows="${v === 'المدخل' ? 4 : 1}" placeholder="…"></textarea></div>`).join('')}</div>` : ''}
+<pre id="body" class="${isP ? 'ar' : ''}"${vars.length ? ` data-src="${esc(d.body)}"` : ''}><code>${esc(d.body)}</code></pre><div id="toast" role="status"></div>
 <button class="btn pri" id="cp" type="button">نسخ</button><a class="btn" href="/#${d.id}">جرّبه في المكتبة التفاعلية</a>
 ${vars.length ? `<h2>المتغيرات</h2><p class="lead">يحتوي على: ${vars.map((v) => `<code>{{${esc(v)}}}</code>`).join('، ')} — استبدلها بمدخلاتك.</p>` : ''}
 <h2>المزيد من ${esc(d.cat)}</h2><ul class="l">${related.map((r) => `<li><a href="${r.url}">${esc(r.title)}</a><small>${esc(r.kind)}</small></li>`).join('')}</ul>
-<script>document.getElementById('cp').onclick=function(){var t=document.getElementById('body').innerText,b=this;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){b.textContent='تم النسخ ✓'}).catch(function(){var r=document.createRange();r.selectNodeContents(document.getElementById('body'));var s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='حدّد النص وانسخه'});setTimeout(function(){b.textContent='نسخ'},1800)}</script>`;
-  write(`p/${d.id}/index.html`, page({ title, description, path: d.url, type: 'article', ld, body }));
+<script>(function(){var B=document.getElementById('body'),C=document.getElementById('cp'),T=document.getElementById('toast');function toast(m){if(!T)return;T.textContent=m;T.className='s';clearTimeout(toast.t);toast.t=setTimeout(function(){T.className=''},1500)}
+function cp(){var t=B.innerText;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){C.textContent='تم النسخ ✓';toast('تم النسخ')}).catch(function(){var r=document.createRange();r.selectNodeContents(B);var s=getSelection();s.removeAllRanges();s.addRange(r);C.textContent='حدّد النص وانسخه'});setTimeout(function(){C.textContent='نسخ'},1800)}
+C.onclick=cp;var src=B.getAttribute('data-src');if(src){var vals={};var up=function(){B.firstChild.textContent=src.replace(/[{][{](.+?)[}][}]/g,function(m,k){return vals[k]||m})};document.querySelectorAll('#vf textarea').forEach(function(t){t.oninput=function(){vals[t.getAttribute('data-k')]=t.value;up()}})}
+document.addEventListener('keydown',function(e){if(e.key&&e.key.toLowerCase()==='c'&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&!/^(INPUT|TEXTAREA)$/.test((e.target||{}).tagName||'')&&!String(getSelection())){cp()}})})()</script>`;
+write(`p/${d.id}/index.html`, page({ title, description, path: d.url, type: 'article', ld, body }));
 }
+
+// ---------- واجهة المطورين: JSON ثابت /api/v1/ ----------
+const varsOf = (d) => (d.type === 'prompt' ? [...new Set([...d.body.matchAll(/\{\{(.+?)\}\}/g)].map((m) => m[1]))] : []);
+const snip = (d) => ({ id: d.id, title: d.title, description: d.desc, type: d.type, category: d.cat, language: d.type === 'code' ? d.lang : 'ar', content: d.body, variables: varsOf(d), url: SITE + d.url, api: `${SITE}/api/v1/snippets/${d.id}.json`, license: 'MIT' });
+for (const d of DATA) write(`api/v1/snippets/${d.id}.json`, JSON.stringify(snip(d), null, 2));
+write('api/v1/snippets.json', JSON.stringify({ count: DATA.length, updated: NOW, items: DATA.map((d) => ({ id: d.id, title: d.title, type: d.type, category: d.cat, language: d.type === 'code' ? d.lang : 'ar', api: `${SITE}/api/v1/snippets/${d.id}.json` })) }, null, 2));
+const first = DATA.find((d) => d.type === 'prompt') || DATA[0];
+const apiBody = `<div class="crumb"><a href="/">${NAME}</a> / API</div>
+<h1>واجهة سِياق للمطورين</h1>
+<p class="lead">كل برومبت وكود في سِياق متاح كـ JSON نظيف، مجاناً وبدون مفتاح، ويدعم CORS من أي موقع.</p>
+<h2>القائمة الكاملة</h2><pre><code>GET ${SITE}/api/v1/snippets.json</code></pre>
+<h2>عنصر واحد</h2><pre><code>GET ${SITE}/api/v1/snippets/{id}.json</code></pre>
+<h2>مثال</h2><pre><code>curl ${SITE}/api/v1/snippets/${first.id}.json</code></pre>
+<pre><code>${esc(JSON.stringify(snip(first), null, 2))}</code></pre>
+<h2>الحقول</h2><p class="lead">id، title، description، type (prompt أو code)، category، language، content، variables (مصفوفة أسماء المتغيرات)، url، api، license.</p>
+<h2>استبدال المتغيرات</h2><pre><code>fetch('${SITE}/api/v1/snippets/${first.id}.json').then(r => r.json()).then(s => {
+const text = s.content.replace(/\\{\\{(.+?)\\}\\}/g, (m, k) => values[k] ?? m);
+});</code></pre>
+<p class="lead">الترخيص MIT. الشيفرة على <a href="${REPO}" rel="noopener">GitHub</a>.</p>`;
+write('api/index.html', page({ title: `واجهة المطورين (API) | ${NAME}`, description: 'JSON مجاني لكل برومبت وكود عربي في سِياق، مع المتغيرات والترخيص، يدعم CORS.', path: '/api/', body: apiBody }));
 
 // ---------- صفحات التصنيفات ----------
 for (const c of catNames) {
-  const list = byCat[c];
-  const p = `/c/${slugOf(c)}/`;
-  const title = `${c} — برومبتات وأكواد عربية جاهزة | ${NAME}`;
-  const description = clip(`${list.length} عنصراً في تصنيف «${c}»: ${list.slice(0, 4).map((d) => d.title).join('، ')} وغيرها، جاهزة للنسخ.`, 158);
-  const ld = [{ '@context': 'https://schema.org', '@type': 'CollectionPage', name: c, url: SITE + p, inLanguage: 'ar', mainEntity: { '@type': 'ItemList', itemListElement: list.map((d, i) => ({ '@type': 'ListItem', position: i + 1, url: SITE + d.url, name: d.title })) } }];
-  write(`c/${slugOf(c)}/index.html`, page({ title, description, path: p, ld, body: `<div class="crumb"><a href="/">${NAME}</a></div><h1>${esc(c)}</h1><p class="lead">${esc(description)}</p><ul class="l">${list.map((d) => `<li><a href="${d.url}">${esc(d.title)}</a><small>${esc(d.kind)} — ${esc(clip(d.desc, 110))}</small></li>`).join('')}</ul>` }));
+const list = byCat[c];
+const p = `/c/${slugOf(c)}/`;
+const title = `${c} — برومبتات وأكواد عربية جاهزة | ${NAME}`;
+const description = clip(`${list.length} عنصراً في تصنيف «${c}»: ${list.slice(0, 4).map((d) => d.title).join('، ')} وغيرها، جاهزة للنسخ.`, 158);
+const ld = [{ '@context': 'https://schema.org', '@type': 'CollectionPage', name: c, url: SITE + p, inLanguage: 'ar', mainEntity: { '@type': 'ItemList', itemListElement: list.map((d, i) => ({ '@type': 'ListItem', position: i + 1, url: SITE + d.url, name: d.title })) } }];
+write(`c/${slugOf(c)}/index.html`, page({ title, description, path: p, ld, body: `<div class="crumb"><a href="/">${NAME}</a></div><h1>${esc(c)}</h1><p class="lead">${esc(description)}</p><ul class="l">${list.map((d) => `<li><a href="${d.url}">${esc(d.title)}</a><small>${esc(d.kind)} — ${esc(clip(d.desc, 110))}</small></li>`).join('')}</ul>` }));
 }
 
 // ---------- ملفات الزواحف ----------
-const urls = ['/', ...catNames.map((c) => `/c/${slugOf(c)}/`), ...DATA.map((d) => d.url)];
+const urls = ['/', '/api/', ...catNames.map((c) => `/c/${slugOf(c)}/`), ...DATA.map((d) => d.url)];
 write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((u) => `<url><loc>${SITE}${u}</loc><lastmod>${NOW}</lastmod><priority>${u === '/' ? '1.0' : u.startsWith('/c/') ? '0.7' : '0.6'}</priority></url>`).join('\n')}\n</urlset>\n`);
 write('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
 write('rss.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel><title>${NAME} — ${TAGLINE}</title><link>${SITE}/</link><description>${esc(homeDesc)}</description><language>ar</language>\n${DATA.slice(0, 50).map((d) => `<item><title>${esc(d.title)}</title><link>${SITE}${d.url}</link><guid>${SITE}${d.url}</guid><description>${esc(d.desc)}</description><category>${esc(d.cat)}</category></item>`).join('\n')}\n</channel></rss>\n`);
 write('404.html', page({ title: `الصفحة غير موجودة | ${NAME}`, description: 'الصفحة المطلوبة غير موجودة.', path: '/404.html', body: `<h1>الصفحة غير موجودة</h1><p class="lead">ربما تغيّر الرابط. <a href="/">ارجع إلى المكتبة</a>.</p>` }).replace('content="index,follow,max-snippet:-1,max-image-preview:large"', 'content="noindex"'));
 for (const f of ['favicon.svg', 'site.webmanifest']) {
-  const src = path.join(ROOT, 'public', f);
-  if (fs.existsSync(src)) write(f, fs.readFileSync(src, 'utf8').replace(/^\uFEFF/, ''));
+const src = path.join(ROOT, 'public', f);
+if (fs.existsSync(src)) write(f, fs.readFileSync(src, 'utf8').replace(/^\uFEFF/, ''));
 }
 fs.copyFileSync(path.join(ROOT, 'public', 'og.png'), path.join(DIST, 'og.png'));
-write('_headers', `/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n/p/*\n  Cache-Control: public, max-age=3600\n`);
+write('_headers', `/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n/data.js\n  Content-Type: text/javascript; charset=utf-8\n  Cache-Control: public, max-age=0, must-revalidate\n/api/*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=3600\n/p/*\n  Cache-Control: public, max-age=3600\n`);
 console.log(`✅ ${DATA.length} عنصر → ${DATA.length} صفحة + ${catNames.length} تصنيف + sitemap/robots/rss/404 → dist/`);
