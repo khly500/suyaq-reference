@@ -262,7 +262,7 @@ function buildDetail(){
 
   const out=mk('div','out'),oh=mk('div','oh'),lights=mk('div','lights');
   lights.innerHTML='<i></i><i></i><i></i>';oh.append(lights);
-  const fmts=d.type==='prompt'?[['text','prompt'],['messages','messages'],['python','python'],['curl','curl']]:[['text',d.file||'code']];
+  const fmts=d.type==='prompt'?[['text','prompt'],['messages','messages'],['python','python'],['curl','curl'],['claude','claude'],['gemini','gemini']]:[['text',d.file||'code']];
   fmts.forEach(([k,l])=>{const b=mk('button','fmt'+(st.fmt===k?' on':''),l);b.dataset.k=k;
     b.onclick=()=>{st.fmt=k;oh.querySelectorAll('.fmt').forEach(x=>x.classList.toggle('on',x.dataset.k===k));paint()};oh.append(b)});
   const cp=mk('button','cp','نسخ');cp.id='cp';cp.onclick=copy;oh.append(cp);
@@ -274,7 +274,7 @@ function exportText(d){
   const T=text(d);
   if(st.fmt==='messages')return JSON.stringify([{role:'user',content:T}],null,2);
   if(st.fmt==='python')return `from openai import OpenAI\n\nclient = OpenAI()\nres = client.chat.completions.create(\n    model="gpt-4o",\n    messages=[{"role": "user", "content": ${JSON.stringify(T)}}],\n)\nprint(res.choices[0].message.content)`;
-  if(st.fmt==='curl'){const b=JSON.stringify({model:'gpt-4o',messages:[{role:'user',content:T}]},null,2).replace(/'/g,"'\\''");
+  if(st.fmt==='claude')return ['import anthropic','','client = anthropic.Anthropic()','msg = client.messages.create(','    model="claude-sonnet-5-5",','    max_tokens=1024,','    messages=[{"role": "user", "content": '+JSON.stringify(T)+'}],',')','print(msg.content[0].text)'].join(String.fromCharCode(10));if(st.fmt==='gemini')return ['from google import genai','','client = genai.Client()','res = client.models.generate_content(','    model="gemini-2.5-flash",','    contents='+JSON.stringify(T)+',',')','print(res.text)'].join(String.fromCharCode(10));if(st.fmt==='curl'){const b=JSON.stringify({model:'gpt-4o',messages:[{role:'user',content:T}]},null,2).replace(/'/g,"'\\''");
     return `curl https://api.openai.com/v1/chat/completions \\\n  -H "Authorization: Bearer $OPENAI_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d '${b}'`}
   return T;
 }
