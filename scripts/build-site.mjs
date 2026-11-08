@@ -112,7 +112,7 @@ ${FONT}
 <main>
 ${body}
 </main>
-<footer>${NAME} — ${TAGLINE} · مجاني ومفتوح المصدر (MIT) · <a href="${REPO}" rel="noopener">GitHub</a> · <a href="/rss.xml">RSS</a> · <a href="/api/">API</a> · <a href="${SUGGEST}" target="_blank" rel="noopener">اقترح برومبت</a></footer>
+<footer>${NAME} — ${TAGLINE} · مجاني ومفتوح المصدر (MIT) · <a href="${REPO}" rel="noopener">GitHub</a> · <a href="/rss.xml">RSS</a> · <a href="/about/">عن الموقع</a> · <a href="/privacy/">الخصوصية</a> · <a href="/api/">API</a> · <a href="${SUGGEST}" target="_blank" rel="noopener">اقترح برومبت</a></footer>
 </body>
 </html>`;
 
@@ -170,7 +170,7 @@ const text = s.content.replace(/\\{\\{(.+?)\\}\\}/g, (m, k) => values[k] ?? m);
 <p class="lead">الترخيص MIT. الشيفرة على <a href="${REPO}" rel="noopener">GitHub</a>.</p>`;
 write('api/index.html', page({ title: `واجهة المطورين (API) | ${NAME}`, description: 'JSON مجاني لكل برومبت وكود عربي في سِياق، مع المتغيرات والترخيص، يدعم CORS.', path: '/api/', body: apiBody }));
 
-// ---------- صفحات التصنيفات ----------
+write('about/index.html', page({ title: `عن الموقع | ${NAME}`, description: 'سِياق مكتبة عربية مجانية ومفتوحة المصدر للبرومبتات والأكواد الجاهزة لمن يعمل مع الذكاء الاصطناعي.', path: '/about/', body: `<div class="crumb"><a href="/">${NAME}</a> / عن الموقع</div><h1>عن سِياق</h1><p class="lead">سِياق مكتبة عربية مجانية للبرومبتات والأكواد الجاهزة لمن يعمل مع الذكاء الاصطناعي. فيه الآن ${DATA.length} عنصراً مرتبة في ${catNames.length} تصنيفاً، وكلها قابلة للنسخ والتجربة مباشرة.</p><h2>لماذا سِياق؟</h2><p class="lead">معظم مراجع البرومبتات بالإنجليزية، ونصوصها العربية قليلة أو مترجمة ترجمة حرفية. هنا كُتبت البرومبتات بالعربية من الأساس، وفيها متغيرات تملؤها وتنسخ النتيجة جاهزة.</p><h2>من وراء الموقع؟</h2><p class="lead">أعدّه خليل الشمردل (Khal!l) ويطوّره باستمرار.</p><h2>شارك</h2><p class="lead">عندك برومبت مفيد؟ <a href="${SUGGEST}" target="_blank" rel="noopener">اقترحه</a> وسأراجعه وأضيفه. والمشروع مفتوح المصدر على <a href="${REPO}" rel="noopener">GitHub</a> برخصة MIT، وله <a href="/api/">واجهة JSON</a> مجانية.</p><h2>تنبيه</h2><p class="lead">البرومبتات نقطة بداية، ونتائج الذكاء الاصطناعي قد تحتوي على أخطاء. راجع الناتج قبل الاعتماد عليه، ولا ترسل بيانات سرية أو شخصية إلى أي نموذج.</p>` })); write('privacy/index.html', page({ title: `سياسة الخصوصية | ${NAME}`, description: 'كيف يتعامل سِياق مع بياناتك: لا حسابات ولا تتبع ولا إعلانات.', path: '/privacy/', body: `<div class="crumb"><a href="/">${NAME}</a> / الخصوصية</div><h1>سياسة الخصوصية</h1><p class="lead">آخر تحديث: ${NOW}.</p><h2>ما الذي نجمعه؟</h2><p class="lead">لا يطلب سِياق حساباً ولا بريداً ولا أي بيانات شخصية، ولا يستخدم حالياً أدوات تحليل أو إعلانات.</p><h2>ما يُحفظ في متصفحك</h2><p class="lead">المفضلة التي تحفظها تُخزَّن في متصفحك فقط ولا تُرسل إلينا، ويمكنك حذفها بمسح بيانات الموقع من المتصفح.</p><h2>خدمات خارجية</h2><p class="lead">يُحمَّل الخط من Google Fonts، فيصل الطلب إلى خوادم Google وفق سياستها. ويُستضاف الموقع على Cloudflare Pages، وقد تسجّل خوادمها عنوان IP لأغراض التشغيل والأمان. وعند ضغطك «جرّب في ChatGPT» أو «جرّب في Claude» يُفتح موقع الخدمة ويُرسل إليها نص البرومبت الظاهر في الصفحة، وتخضع لسياسة تلك الخدمة. أما زر Gemini فينسخ النص إلى حافظتك فقط ثم يفتح Gemini.</p><h2>اقتراح برومبت</h2><p class="lead">يتم الاقتراح عبر GitHub، وما تكتبه هناك علني ويخضع لسياسة GitHub.</p><h2>التواصل</h2><p class="lead">لأي سؤال افتح طلباً في <a href="${REPO}/issues" rel="noopener">GitHub</a>.</p>` })); // ---------- صفحات التصنيفات ----------
 for (const c of catNames) {
 const list = byCat[c];
 const p = `/c/${slugOf(c)}/`;
@@ -181,7 +181,7 @@ write(`c/${slugOf(c)}/index.html`, page({ title, description, path: p, ld, body:
 }
 
 // ---------- ملفات الزواحف ----------
-const urls = ['/', '/api/', ...catNames.map((c) => `/c/${slugOf(c)}/`), ...DATA.map((d) => d.url)];
+const urls = ['/', '/api/', '/about/', '/privacy/', ...catNames.map((c) => `/c/${slugOf(c)}/`), ...DATA.map((d) => d.url)];
 write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((u) => `<url><loc>${SITE}${u}</loc><lastmod>${NOW}</lastmod><priority>${u === '/' ? '1.0' : u.startsWith('/c/') ? '0.7' : '0.6'}</priority></url>`).join('\n')}\n</urlset>\n`);
 write('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
 write('rss.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel><title>${NAME} — ${TAGLINE}</title><link>${SITE}/</link><description>${esc(homeDesc)}</description><language>ar</language>\n${DATA.slice(0, 50).map((d) => `<item><title>${esc(d.title)}</title><link>${SITE}${d.url}</link><guid>${SITE}${d.url}</guid><description>${esc(d.desc)}</description><category>${esc(d.cat)}</category></item>`).join('\n')}\n</channel></rss>\n`);
