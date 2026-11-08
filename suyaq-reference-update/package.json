@@ -1,0 +1,15 @@
+{
+  "name": "suyaq-reference",
+  "version": "2.1.0",
+  "description": "سِياق — مرجع المطوّر العربي للذكاء الاصطناعي: برومبتات وأكواد عربية جاهزة",
+  "type": "module",
+  "license": "MIT",
+  "homepage": "https://ai.skakh.com",
+  "repository": { "type": "git", "url": "git+https://github.com/khly500/suyaq-reference.git" },
+  "scripts": {
+    "validate": "node scripts/validate-prompts.mjs",
+    "build": "node scripts/build-site.mjs",
+    "preview": "npx serve dist"
+  },
+  "engines": { "node": ">=18" }
+}
