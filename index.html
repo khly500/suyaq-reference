@@ -125,7 +125,7 @@ kbd{font-family:var(--mono);font-size:11px;padding:1px 6px;border:1px solid var(
   .sh{display:none}.nav{width:auto;white-space:nowrap;border:1px solid var(--bd)}
   .detail{position:fixed;inset:54px 0 0 0;z-index:20;background:var(--bg);display:none;padding:20px 18px 60px}
   .detail.open{display:block}.back{display:block}
-  .kbtn{min-width:0;flex:1}.kbtn kbd,.lnk{display:none}.hint{display:none}
+  .kbtn{min-width:0;flex:1}.kbtn kbd,.lnk:not(.sg){display:none}.hint{display:none}
 }
 </style>
 </head>
@@ -135,7 +135,7 @@ kbd{font-family:var(--mono);font-size:11px;padding:1px 6px;border:1px solid var(
   <div class="logo"><div class="mark">س</div>سِياق</div>
   <div class="sp"></div>
   <button class="kbtn" id="open-pal">⌕ <span>ابحث في المكتبة…</span><kbd>Ctrl K</kbd></button>
-  <a class="lnk" href="https://github.com/khly500/suyaq-ai" target="_blank" rel="noopener">GitHub</a><a class="lnk" href="https://github.com/khly500/suyaq-reference/issues/new?template=prompt_suggestion.yml" target="_blank" rel="noopener">اقترح برومبت</a>
+  <a class="lnk" href="https://github.com/khly500/suyaq-ai" target="_blank" rel="noopener">GitHub</a><a class="lnk sg" href="https://github.com/khly500/suyaq-reference/issues/new?template=prompt_suggestion.yml" target="_blank" rel="noopener">اقترح برومبت</a>
 </header>
 
 <div class="app">
@@ -345,5 +345,5 @@ addEventListener('keydown',e=>{
   if(d&&innerWidth<=960)$('detail').classList.add('open');
 })();
 </script>
-</body>
+<script>var L=document.querySelector('.logo');if(L){L.style.cursor='pointer';L.addEventListener('click',function(){location.href='/'})}</script></body>
 </html>
