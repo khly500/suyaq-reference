@@ -228,7 +228,7 @@ function renderSide(){
   h('التصنيفات');
   const p=pool();
   nav('الكل',p.length,st.cat==='الكل',()=>{st.cat='الكل';go()});
-  const cats=[...new Set(p.map(d=>d.cat))],seen=new Set(),cn=c=>{seen.add(c);nav(c,p.filter(d=>d.cat===c).length,st.cat===c,()=>{st.cat=c;go()})};[['للمطورين',['برمجة','بيانات','معالجة النص','أرقام وتواريخ','ملفات وبيانات','أدوات مساعدة']],['لصنّاع المحتوى',['كتابة','تسويق','لهجات']],['للأعمال والتعليم',['أعمال','تعليم','بحث']]].forEach(([t,l])=>{const m=l.filter(c=>cats.includes(c));if(m.length){h(t);m.forEach(cn)}});cats.filter(c=>!seen.has(c)).forEach(cn);
+  const cats=[...new Set(p.map(d=>d.cat))],seen=new Set(),cn=c=>{seen.add(c);nav(c,p.filter(d=>d.cat===c).length,st.cat===c,()=>{st.cat=c;go()})};[['للمطورين',['برمجة','بيانات','معالجة النص','أرقام وتواريخ','ملفات وبيانات','أدوات مساعدة']],['لصنّاع المحتوى',['كتابة','تسويق','لهجات','محتوى سريع']],['للأعمال والتعليم',['أعمال','خدمة عملاء','عقار','سياحة وتراث','تعليم','بحث']]].forEach(([t,l])=>{const m=l.filter(c=>cats.includes(c));if(m.length){h(t);m.forEach(cn)}});cats.filter(c=>!seen.has(c)).forEach(cn);
 }
 function renderList(){
   const L=visible(),box=$('items');box.innerHTML='';
