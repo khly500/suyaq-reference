@@ -165,7 +165,7 @@ const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&qu
 const norm=s=>s.replace(/[\u064B-\u0652\u0640]/g,'').replace(/[إأآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').toLowerCase();
 const toast=m=>{const t=$('toast');t.textContent=m;t.className='s';clearTimeout(toast.t);toast.t=setTimeout(()=>t.className='',1500)};
 
-DATA.forEach(d=>{d.desc=d.desc||(d.type==='prompt'?d.body.split('\n')[0]:d.lang+' · '+d.title)});
+DATA.forEach(d=>{d.desc=d.desc||(d.type==='prompt'?((ls)=>ls.find(x=>!/^أنت /.test(x))||ls[0])(d.body.split(String.fromCharCode(10)).map(x=>x.trim()).filter(Boolean)).split('\n')[0]:d.lang+' · '+d.title)});
 
 const st={type:'prompt',cat:'الكل',q:'',sel:null,fmt:'text',vals:{},fav:JSON.parse(localStorage.fav||'[]')};
 const TYPES={prompt:'برومبتات',code:'أكواد'};
