@@ -30,7 +30,7 @@ const CATS = {
 const slugOf = (c) => CATS[c] || encodeURIComponent(c);
 
 DATA.forEach((d) => {
-d.desc = d.desc || (d.type === 'prompt' ? d.body.split('\n')[0] : `${d.lang} · ${d.title}`);
+d.desc = d.desc || (d.type === 'prompt' ? d.body.replace(/[{][{](.+?)[}][}]/g, '«$1»').split('\n')[0] : `${d.lang} · ${d.title}`);
 d.url = `/p/${d.id}/`;
 d.kind = d.type === 'prompt' ? 'برومبت' : `كود ${d.lang}`;
 });
