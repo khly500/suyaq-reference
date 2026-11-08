@@ -90,8 +90,8 @@ fs.copyFileSync(path.join(ROOT, 'data.js'), path.join(DIST, 'data.js'));
 // ---------- قالب الصفحات الفرعية ----------
 const CSS = `:root{--bg:#0d1117;--p1:#161b22;--p2:#1c2230;--bd:#30363d;--tx:#f0f3f6;--mut:#9198a1;--ac:#4ade9e;--gold:#d6b872;--mono:'JetBrains Mono',ui-monospace,Consolas,monospace}
 *{box-sizing:border-box;margin:0}body{font-family:'IBM Plex Sans Arabic','Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--tx);line-height:1.8;font-size:16px}
-a{color:var(--ac);text-decoration:none}a:hover{text-decoration:underline}
-header{display:flex;gap:16px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--bd)}header .logo{font-weight:700;font-size:18px;color:var(--tx);display:flex;gap:10px;align-items:center}
+a{color:var(--ac);text-decoration:none}a:hover{text-decoration:underline}main a:not(.btn),footer a{text-decoration:underline;text-underline-offset:3px}
+header{display:flex;flex-wrap:wrap;row-gap:6px;gap:16px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--bd)}header .logo{font-weight:700;font-size:18px;color:var(--tx);display:flex;gap:10px;align-items:center}
 .mark{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:linear-gradient(135deg,var(--ac),#1f9d6a);color:#04140c;font-weight:700}
 header .sp{flex:1}main{max-width:860px;margin:0 auto;padding:28px 20px 70px}
 .crumb{color:var(--mut);font-size:14px;margin-bottom:10px}h1{font-size:28px;line-height:1.4;margin-bottom:8px}h2{font-size:19px;margin:30px 0 10px}
