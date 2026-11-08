@@ -8,7 +8,8 @@
   "repository": { "type": "git", "url": "git+https://github.com/khly500/suyaq-reference.git" },
   "scripts": {
     "validate": "node scripts/validate-prompts.mjs",
-    "build": "node scripts/build-site.mjs",
+    "build": "node scripts/build-site.mjs && node scripts/audit-site.mjs",
+    "audit": "node scripts/audit-site.mjs",
     "preview": "npx serve dist"
   },
   "engines": { "node": ">=18" }
