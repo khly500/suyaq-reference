@@ -154,7 +154,7 @@ kbd{font-family:var(--mono);font-size:11px;padding:1px 6px;border:1px solid var(
 <header class="top">
   <button class="burger" id="burger" aria-label="القائمة" aria-expanded="false"><i></i></button>
   <div class="logo"><div class="mark">س</div>سِياق</div>
-  <nav class="tnav" id="tnav"><a href="#" data-t="prompt">البرومبتات</a><a href="#" data-t="code">الأكواد</a><a href="/api/">API</a><a href="/about/">عن الموقع</a></nav>
+  <nav class="tnav" id="tnav"><a href="#" data-t="prompt">البرومبتات</a><a href="#" data-t="code">الأكواد</a><a href="/tools/">الأدوات</a><a href="/faq/">الأسئلة</a><a href="/api/">API</a><a href="/about/">عن الموقع</a></nav>
   <div class="sp"></div>
   <button class="kbtn" id="open-pal">⌕ <span>ابحث في المكتبة…</span><kbd>Ctrl K</kbd></button>
   <a class="lnk" href="https://github.com/khly500/suyaq-ai" target="_blank" rel="noopener">GitHub</a><a class="lnk sg" href="https://github.com/khly500/suyaq-reference/issues/new?template=prompt_suggestion.yml" target="_blank" rel="noopener">اقترح برومبت</a>
@@ -380,7 +380,7 @@ function renderDrawer(){
   const p=pool();row('الكل',p.length,st.cat==='الكل',()=>{st.cat='الكل';go()});
   [...new Set(p.map(d=>d.cat))].forEach(c=>row(c,p.filter(d=>d.cat===c).length,st.cat===c,()=>{st.cat=c;go()}));
   h('المزيد');
-  link('API','/api/');link('عن الموقع','/about/');link('الخصوصية','/privacy/');
+  link('الأدوات','/tools/');link('الأسئلة','/faq/');link('أخطاء شائعة','/pitfalls/');link('API','/api/');link('عن الموقع','/about/');link('الخصوصية','/privacy/');
   link('GitHub','https://github.com/khly500/suyaq-reference',true);
   link('اقترح برومبت','https://github.com/khly500/suyaq-reference/issues/new?template=prompt_suggestion.yml',true);
 }
