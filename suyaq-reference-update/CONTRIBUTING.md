@@ -1,6 +1,4 @@
-# المساهمة في سِياق
-
-## تشغيل المشروع
+تشغيل المشروع
 ```bash
 git clone https://github.com/khly500/suyaq-reference.git
 cd suyaq-reference
