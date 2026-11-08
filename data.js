@@ -238,3 +238,9 @@ window.FIX={
 window.DATA.forEach(d=>{if(window.FIX[d.title])d.body=window.FIX[d.title]});
 Object.assign(window.REMOVED,{"tests":"unit-tests-ar","sql":"sql-from-question","migrate-code":"convert","regex":"regex-builder","study":"study-plan-pro","study-plan":"study-plan-pro","quiz":"quiz-maker","quiz-mcq":"quiz-maker","job":"job-posting","job-ad":"job-posting","product":"product-description","product-desc":"product-description","tone":"tone-rewrite","email":"email-formal","api":"api-design"});
 window.DATA=window.DATA.filter(d=>!window.REMOVED[d.id]);
+window.FIX2={
+"c1":"import re\n\ndef normalize(text: str) -> str:\n    \"\"\"للبحث والمطابقة فقط. لا تستخدمه لعرض النص الأصلي: يحذف التشكيل ويغيّر ى إلى ي وة إلى ه.\"\"\"\n    text = re.sub(r\"[\\u064B-\\u065F\\u0640]\", \"\", text)   # التشكيل والتطويل\n    text = re.sub(r\"[إأآ]\", \"ا\", text)\n    text = text.replace(\"ى\", \"ي\").replace(\"ة\", \"ه\")\n    return re.sub(r\"\\s+\", \" \", text).strip()",
+"c2":"// للبحث والمطابقة فقط: يحذف التشكيل ويغيّر ى إلى ي وة إلى ه، فلا يصلح لعرض النص للمستخدم\nexport const normalize = (s) =>\n  s.replace(/[\\u064B-\\u065F\\u0640]/g, \"\")\n   .replace(/[إأآ]/g, \"ا\")\n   .replace(/ى/g, \"ي\")\n   .replace(/ة/g, \"ه\")\n   .replace(/\\s+/g, \" \")\n   .trim();",
+"c44":"const amount = 1250.5;\n\n// أرقام هندية (الافتراضي في ar-SA): ١٬٢٥٠٫٥٠ ر.س.\nconsole.log(new Intl.NumberFormat(\"ar-SA\", { style: \"currency\", currency: \"SAR\" }).format(amount));\n\n// أرقام غربية، مناسبة للفواتير والتقارير: 1,250.50 ر.س.\nconsole.log(new Intl.NumberFormat(\"ar-SA-u-nu-latn\", { style: \"currency\", currency: \"SAR\" }).format(amount));"
+};
+window.DATA.forEach(d=>{if(window.FIX2[d.id])d.body=window.FIX2[d.id]});
