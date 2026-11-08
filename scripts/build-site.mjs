@@ -15,7 +15,7 @@ const NOW = new Date().toISOString().slice(0, 10);
 
 const ctx = { window: {} };
 vm.runInNewContext(fs.readFileSync(path.join(ROOT, 'data.js'), 'utf8'), ctx);
-const DATA = ctx.window.DATA;
+const DATA = ctx.window.DATA; const REMOVED = ctx.window.REMOVED || {}; const SUGGEST = REPO + '/issues/new?template=prompt_suggestion.yml';
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const clip = (s, n) => { s = s.replace(/\s+/g, ' ').trim(); return s.length <= n ? s : s.slice(0, n - 1).replace(/\s+\S*$/, '') + '…'; };
@@ -108,11 +108,11 @@ ${FONT}
 <style>${CSS}</style>
 </head>
 <body>
-<header><a class="logo" href="/"><span class="mark">س</span>${NAME}</a><span class="sp"></span><a href="/">المكتبة</a><a href="${REPO}" rel="noopener">GitHub</a></header>
+<header><a class="logo" href="/"><span class="mark">س</span>${NAME}</a><span class="sp"></span><a href="/">المكتبة</a><a href="${REPO}" rel="noopener">GitHub</a><a href="${SUGGEST}" target="_blank" rel="noopener">اقترح برومبت</a></header>
 <main>
 ${body}
 </main>
-<footer>${NAME} — ${TAGLINE} · مجاني ومفتوح المصدر (MIT) · <a href="${REPO}" rel="noopener">GitHub</a> · <a href="/rss.xml">RSS</a> · <a href="/api/">API</a></footer>
+<footer>${NAME} — ${TAGLINE} · مجاني ومفتوح المصدر (MIT) · <a href="${REPO}" rel="noopener">GitHub</a> · <a href="/rss.xml">RSS</a> · <a href="/api/">API</a> · <a href="${SUGGEST}" target="_blank" rel="noopener">اقترح برومبت</a></footer>
 </body>
 </html>`;
 
@@ -140,12 +140,12 @@ const body = `<div class="crumb"><a href="/">${NAME}</a> / <a href="/c/${slugOf(
 <p class="lead">${esc(d.desc)}</p>
 ${vars.length ? `<h2>املأ المتغيرات</h2><style>.vf{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:0 0 18px}.vf label{display:block;font-size:13px;margin-bottom:4px;opacity:.8}.vf textarea{width:100%;box-sizing:border-box;font:inherit;background:transparent;color:inherit;border:1px solid rgba(128,128,128,.4);border-radius:9px;padding:8px 12px}#toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,12px);background:#17171c;border:1px solid #2a2a33;color:#4ade9e;padding:9px 18px;border-radius:10px;opacity:0;pointer-events:none;transition:.2s}#toast.s{opacity:1;transform:translate(-50%,0)}</style><div class="vf" id="vf">${vars.map((v, i) => `<div><label for="v${i}">${esc(v)}</label><textarea id="v${i}" data-k="${esc(v)}" rows="${v === 'المدخل' ? 4 : 1}" placeholder="…"></textarea></div>`).join('')}</div>` : ''}
 <pre id="body" class="${isP ? 'ar' : ''}"${vars.length ? ` data-src="${esc(d.body)}"` : ''}><code>${esc(d.body)}</code></pre><div id="toast" role="status"></div>
-<button class="btn pri" id="cp" type="button">نسخ</button><a class="btn" href="/#${d.id}">جرّبه في المكتبة التفاعلية</a>
+<button class="btn pri" id="cp" type="button">نسخ</button><a class="btn" href="/#${d.id}">جرّبه في المكتبة التفاعلية</a>${isP ? '<a class="btn" id="gpt" href="https://chatgpt.com/" target="_blank" rel="noopener">جرّب في ChatGPT</a><a class="btn" id="cl" href="https://claude.ai/new" target="_blank" rel="noopener">جرّب في Claude</a>' : ''}<button class="btn" id="sh" type="button">مشاركة</button>
 ${vars.length ? `<h2>المتغيرات</h2><p class="lead">يحتوي على: ${vars.map((v) => `<code>{{${esc(v)}}}</code>`).join('، ')} — استبدلها بمدخلاتك.</p>` : ''}
 <h2>المزيد من ${esc(d.cat)}</h2><ul class="l">${related.map((r) => `<li><a href="${r.url}">${esc(r.title)}</a><small>${esc(r.kind)}</small></li>`).join('')}</ul>
 <script>(function(){var B=document.getElementById('body'),C=document.getElementById('cp'),T=document.getElementById('toast');function toast(m){if(!T)return;T.textContent=m;T.className='s';clearTimeout(toast.t);toast.t=setTimeout(function(){T.className=''},1500)}
 function cp(){var t=B.innerText;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){C.textContent='تم النسخ ✓';toast('تم النسخ')}).catch(function(){var r=document.createRange();r.selectNodeContents(B);var s=getSelection();s.removeAllRanges();s.addRange(r);C.textContent='حدّد النص وانسخه'});setTimeout(function(){C.textContent='نسخ'},1800)}
-C.onclick=cp;var src=B.getAttribute('data-src');if(src){var vals={};var up=function(){B.firstChild.textContent=src.replace(/[{][{](.+?)[}][}]/g,function(m,k){return vals[k]||m})};document.querySelectorAll('#vf textarea').forEach(function(t){t.oninput=function(){vals[t.getAttribute('data-k')]=t.value;up()}})}
+C.onclick=cp;var G=document.getElementById('gpt'),K=document.getElementById('cl'),S=document.getElementById('sh');if(G){G.onclick=function(){G.href='https://chatgpt.com/?q='+encodeURIComponent(B.innerText)};K.onclick=function(){K.href='https://claude.ai/new?q='+encodeURIComponent(B.innerText)}}S.onclick=function(){if(navigator.share){navigator.share({title:document.title,url:location.href}).catch(function(){})}else if(navigator.clipboard){navigator.clipboard.writeText(location.href).then(function(){toast('تم نسخ الرابط')})}};var src=B.getAttribute('data-src');if(src){var vals={};var up=function(){B.firstChild.textContent=src.replace(/[{][{](.+?)[}][}]/g,function(m,k){return vals[k]||m})};document.querySelectorAll('#vf textarea').forEach(function(t){t.oninput=function(){vals[t.getAttribute('data-k')]=t.value;up()}})}
 document.addEventListener('keydown',function(e){if(e.key&&e.key.toLowerCase()==='c'&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&!/^(INPUT|TEXTAREA)$/.test((e.target||{}).tagName||'')&&!String(getSelection())){cp()}})})()</script>`;
 write(`p/${d.id}/index.html`, page({ title, description, path: d.url, type: 'article', ld, body }));
 }
@@ -191,5 +191,5 @@ const src = path.join(ROOT, 'public', f);
 if (fs.existsSync(src)) write(f, fs.readFileSync(src, 'utf8').replace(/^\uFEFF/, ''));
 }
 fs.copyFileSync(path.join(ROOT, 'public', 'og.png'), path.join(DIST, 'og.png'));
-write('_headers', `/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n/data.js\n  Content-Type: text/javascript; charset=utf-8\n  Cache-Control: public, max-age=0, must-revalidate\n/api/*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=3600\n/p/*\n  Cache-Control: public, max-age=3600\n`);
+write('_redirects', Object.entries(REMOVED).flatMap(([a, b]) => ['/p/' + a + ' /p/' + b + '/ 301', '/p/' + a + '/ /p/' + b + '/ 301']).join(String.fromCharCode(10)) + String.fromCharCode(10)); write('_headers', `/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n/data.js\n  Content-Type: text/javascript; charset=utf-8\n  Cache-Control: public, max-age=0, must-revalidate\n/api/*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=3600\n/p/*\n  Cache-Control: public, max-age=3600\n`);
 console.log(`✅ ${DATA.length} عنصر → ${DATA.length} صفحة + ${catNames.length} تصنيف + sitemap/robots/rss/404 → dist/`);
