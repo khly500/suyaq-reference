@@ -25,7 +25,7 @@ const CATS = {
 'برمجة': 'programming', 'كتابة': 'writing', 'لهجات': 'dialects', 'بيانات': 'data',
 'تعليم': 'education', 'أعمال': 'business', 'تسويق': 'marketing', 'بحث': 'research',
 'معالجة النص': 'text-processing', 'أرقام وتواريخ': 'numbers-dates',
-'ملفات وبيانات': 'files-data', 'أدوات مساعدة': 'utilities',
+'ملفات وبيانات': 'files-data', 'أدوات مساعدة': 'utilities', 'ذكاء اصطناعي': 'ai',
 };
 const slugOf = (c) => CATS[c] || encodeURIComponent(c);
 
