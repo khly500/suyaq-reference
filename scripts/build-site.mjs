@@ -26,6 +26,7 @@ const CATS = {
 'تعليم': 'education', 'أعمال': 'business', 'تسويق': 'marketing', 'بحث': 'research',
 'معالجة النص': 'text-processing', 'أرقام وتواريخ': 'numbers-dates',
 'ملفات وبيانات': 'files-data', 'أدوات مساعدة': 'utilities', 'ذكاء اصطناعي': 'ai',
+'عقار': 'real-estate', 'سياحة وتراث': 'tourism-heritage', 'محتوى سريع': 'fast-content', 'خدمة عملاء': 'customer-service',
 };
 const slugOf = (c) => CATS[c] || encodeURIComponent(c);
 
