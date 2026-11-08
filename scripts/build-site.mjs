@@ -82,7 +82,7 @@ app = app.replace(/<meta charset="utf-8">\s*<meta name="viewport"[^>]*>\s*<title
 app = app.replace('href="https://github.com/khly500/suyaq-ai"', `href="${REPO}"`);
 app = app.replace('<div class="logo"><div class="mark">س</div>سِياق</div>', `<h1 class="logo" style="position:relative"><span class="mark">س</span>${NAME}<span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"> — ${TAGLINE}</span></h1>`);
 const index = `<noscript><main style="padding:24px;max-width:860px;margin:auto;overflow:auto;height:100vh"><h2>${NAME} — ${TAGLINE}</h2><p>${esc(homeDesc)}</p>${catNames.map((c) => `<h3><a href="/c/${slugOf(c)}/">${esc(c)}</a></h3><ul>${byCat[c].map((d) => `<li><a href="${d.url}">${esc(d.title)}</a></li>`).join('')}</ul>`).join('')}</main></noscript>\n<nav aria-label="فهرس المكتبة" hidden>${DATA.map((d) => `<a href="${d.url}">${esc(d.title)}</a>`).join(' ')}</nav>\n`;
-app = app.replace('<script src="data.js"></script>', index + '<script src="/data.js"></script>');
+app = app.replace('<script src="data.js"></script>', index + '<script src="/data.js?v=' + DATA.length + '-' + fs.statSync(path.join(ROOT, 'data.js')).size + '"></script>');
 write('index.html', app);
 fs.copyFileSync(path.join(ROOT, 'data.js'), path.join(DIST, 'data.js'));
 
