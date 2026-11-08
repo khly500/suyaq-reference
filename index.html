@@ -12,7 +12,7 @@
 :root{
   --bg:#0d1117;--p1:#161b22;--p2:#1c2230;--p3:#21262d;
   --bd:#30363d;--bd2:#484f58;
-  --tx:#f0f3f6;--mut:#9198a1;--dim:#6e7681;
+  --tx:#f0f3f6;--mut:#9198a1;--dim:#8b949e;
   --ac:#4ade9e;--ac2:rgba(74,222,158,.11);--gold:#d6b872;
   --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
 }
@@ -162,7 +162,7 @@ kbd{font-family:var(--mono);font-size:11px;padding:1px 6px;border:1px solid var(
 <div class="drawer" id="drawer" hidden></div>
 <section class="intro"><div><h1>مرجع المطوّر العربي <em>للذكاء الاصطناعي</em></h1><p>برومبتات وأكواد عربية جاهزة للنسخ والتجربة، مع أمثلة API لـ OpenAI وClaude وGemini. مجاني ومفتوح المصدر.</p></div><div class="stats" id="stats"></div></section>
 
-<div class="app">
+<div class="app" role="main">
   <aside class="side" id="side"></aside>
   <section class="list">
     <div class="lhead"><input id="flt" placeholder="تصفية القائمة…" autocomplete="off"></div>
@@ -191,7 +191,10 @@ const toast=m=>{const t=$('toast');t.textContent=m;t.className='s';clearTimeout(
 
 DATA.forEach(d=>{d.desc=d.desc||(d.type==='prompt'?((ls)=>ls.find(x=>!/^أنت /.test(x))||ls[0])(d.body.split(String.fromCharCode(10)).map(x=>x.trim()).filter(Boolean)).split('\n')[0]:d.lang+' · '+d.title)});
 
-const st={type:'prompt',cat:'الكل',q:'',sel:null,fmt:'text',vals:{},fav:JSON.parse(localStorage.fav||'[]')};
+const loadFav=()=>{try{const a=JSON.parse(localStorage.getItem('fav')||'[]');return Array.isArray(a)?a.filter(id=>DATA.some(d=>d.id===id)):[]}catch(e){return[]}};
+const saveFav=v=>{try{localStorage.setItem('fav',JSON.stringify(v))}catch(e){}};
+const clipW=t=>new Promise((res,rej)=>{const fb=()=>{try{const a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;opacity:0';document.body.append(a);a.select();const r=document.execCommand('copy');a.remove();r?res():rej()}catch(e){rej(e)}};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(res,fb);else fb()});
+const st={type:'prompt',cat:'الكل',q:'',sel:null,fmt:'text',vals:{},fav:loadFav()};
 const TYPES={prompt:'برومبتات',code:'أكواد'};
 
 const KW=/^(import|export|from|def|return|const|let|var|if|else|for|in|class|new|await|async|function|print|None|True|False|as|with|try|except|catch|finally|raise|throw|yield|lambda)$/;
@@ -264,7 +267,7 @@ function buildDetail(){
   const dh=mk('div','dh');dh.append(mk('h1',null,d.title));
   const star=mk('button','star'+(st.fav.includes(d.id)?' on':''),st.fav.includes(d.id)?'★ محفوظ':'☆ حفظ');
   star.onclick=()=>{st.fav=st.fav.includes(d.id)?st.fav.filter(x=>x!==d.id):[...st.fav,d.id];
-    localStorage.fav=JSON.stringify(st.fav);star.className='star'+(st.fav.includes(d.id)?' on':'');
+    saveFav(st.fav);star.className='star'+(st.fav.includes(d.id)?' on':'');
     star.textContent=st.fav.includes(d.id)?'★ محفوظ':'☆ حفظ';renderSide();renderList()};
   dh.append(star);
   const meta=mk('div','meta');
@@ -272,7 +275,7 @@ function buildDetail(){
   if(d.lang)meta.append(mk('span','pill g',d.lang));
   const vars=[...new Set([...d.body.matchAll(/\{\{(.+?)\}\}/g)].map(m=>m[1]))];
   if(vars.length)meta.append(mk('span','pill a',vars.length+' متغيرات'));
-  el.append(back,crumb,dh,mk('p','desc',d.desc),meta);{const ac=mk('div','acts');ac.style.cssText='display:flex;flex-wrap:wrap;gap:8px;margin:12px 0';const ab=(l,f)=>{const b=mk('button','star',l);b.onclick=f;ac.append(b)};if(d.type==='prompt'){ab('جرّب في ChatGPT',()=>window.open('https://chatgpt.com/?q='+encodeURIComponent(text(d)),'_blank','noopener'));ab('جرّب في Claude',()=>window.open('https://claude.ai/new?q='+encodeURIComponent(text(d)),'_blank','noopener'));ab('جرّب في Gemini',()=>{navigator.clipboard.writeText(text(d)).then(()=>toast('تم نسخ البرومبت، الصقه في Gemini'));window.open('https://gemini.google.com/app','_blank','noopener')})}ab('مشاركة',()=>{const u=location.origin+'/p/'+d.id+'/';if(navigator.share)navigator.share({title:d.title,url:u}).catch(()=>{});else navigator.clipboard.writeText(u).then(()=>toast('تم نسخ رابط الصفحة'))});el.append(ac)}
+  el.append(back,crumb,dh,mk('p','desc',d.desc),meta);{const ac=mk('div','acts');ac.style.cssText='display:flex;flex-wrap:wrap;gap:8px;margin:12px 0';const ab=(l,f)=>{const b=mk('button','star',l);b.onclick=f;ac.append(b)};if(d.type==='prompt'){ab('جرّب في ChatGPT',()=>window.open('https://chatgpt.com/?q='+encodeURIComponent(text(d)),'_blank','noopener'));ab('جرّب في Claude',()=>window.open('https://claude.ai/new?q='+encodeURIComponent(text(d)),'_blank','noopener'));ab('جرّب في Gemini',()=>{clipW(text(d)).then(()=>toast('تم نسخ البرومبت، الصقه في Gemini'),()=>toast('تعذّر النسخ، انسخ البرومبت يدوياً'));window.open('https://gemini.google.com/app','_blank','noopener')})}ab('مشاركة',()=>{const u=location.origin+'/p/'+d.id+'/';if(navigator.share)navigator.share({title:d.title,url:u}).catch(()=>{});else clipW(u).then(()=>toast('تم نسخ رابط الصفحة'),()=>toast('تعذّر نسخ الرابط'))});el.append(ac)}
 
   if(vars.length){
     el.append(mk('div','vh','المتغيرات'));
@@ -322,9 +325,9 @@ function paint(){
 }
 function copy(){
   const d=cur();if(!d)return;
-  navigator.clipboard.writeText(d.type==='code'?d.body:exportText(d)).then(()=>{
+  clipW(d.type==='code'?d.body:exportText(d)).then(()=>{
     const b=$('cp');if(b){b.textContent='✓ تم النسخ';b.classList.add('ok');setTimeout(()=>{b.textContent='نسخ';b.classList.remove('ok')},1300)}
-    toast('تم النسخ')});
+    toast('تم النسخ')},()=>toast('تعذّر النسخ، حدّد النص وانسخه يدوياً'));
 }
 
 const pal=$('pal'),pi=$('pi'),pr=$('pr');let pl=[],px=0;
@@ -390,7 +393,9 @@ addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('drawer').hidden)closeDra
 renderStats();
 
 (function init(){
-  const h=decodeURIComponent(location.hash.slice(1)),d=DATA.find(x=>x.id===h);
+  let h='';try{h=decodeURIComponent(location.hash.slice(1))}catch(e){}
+  if(window.REMOVED&&REMOVED[h]){h=REMOVED[h];try{history.replaceState(null,'','#'+h)}catch(e){}}
+  const d=DATA.find(x=>x.id===h);
   if(d){st.type=d.type;st.sel=d.id}
   go();
   if(d&&innerWidth<=960)$('detail').classList.add('open');
