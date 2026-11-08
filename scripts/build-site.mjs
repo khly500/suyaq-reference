@@ -49,7 +49,7 @@ const head = ({ title, description, path: p, type = 'website', ld = [] }) => `<m
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${SITE}${p}">
 <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large">
-<meta name="theme-color" content="#09090b">
+<meta name="theme-color" content="#0d1117">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="alternate" type="application/rss+xml" title="${NAME}" href="/rss.xml">
@@ -88,8 +88,8 @@ write('index.html', app);
 fs.copyFileSync(path.join(ROOT, 'data.js'), path.join(DIST, 'data.js'));
 
 // ---------- قالب الصفحات الفرعية ----------
-const CSS = `:root{--bg:#09090b;--p1:#0f0f12;--p2:#151518;--bd:rgba(255,255,255,.09);--tx:#ececef;--mut:#9a9aa3;--ac:#4ade9e;--gold:#d6b872;--mono:'JetBrains Mono',ui-monospace,Consolas,monospace}
-*{box-sizing:border-box;margin:0}body{font-family:'IBM Plex Sans Arabic','Segoe UI',Tahoma,sans-serif;background:radial-gradient(900px 380px at 75% -8%,rgba(74,222,158,.07),transparent),var(--bg);color:var(--tx);line-height:1.8;font-size:16px}
+const CSS = `:root{--bg:#0d1117;--p1:#161b22;--p2:#1c2230;--bd:#30363d;--tx:#f0f3f6;--mut:#9198a1;--ac:#4ade9e;--gold:#d6b872;--mono:'JetBrains Mono',ui-monospace,Consolas,monospace}
+*{box-sizing:border-box;margin:0}body{font-family:'IBM Plex Sans Arabic','Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--tx);line-height:1.8;font-size:16px}
 a{color:var(--ac);text-decoration:none}a:hover{text-decoration:underline}
 header{display:flex;gap:16px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--bd)}header .logo{font-weight:700;font-size:18px;color:var(--tx);display:flex;gap:10px;align-items:center}
 .mark{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:linear-gradient(135deg,var(--ac),#1f9d6a);color:#04140c;font-weight:700}
@@ -109,11 +109,11 @@ ${FONT}
 <style>${CSS}</style>
 </head>
 <body>
-<header><a class="logo" href="/"><span class="mark">س</span>${NAME}</a><span class="sp"></span><a href="/">المكتبة</a><a href="${REPO}" rel="noopener">GitHub</a><a href="${SUGGEST}" target="_blank" rel="noopener">اقترح برومبت</a></header>
+<header><a class="logo" href="/"><span class="mark">س</span>${NAME}</a><span class="sp"></span><a href="/">المكتبة</a><a href="/tools/">الأدوات</a><a href="/faq/">الأسئلة</a><a href="${REPO}" rel="noopener">GitHub</a><a href="${SUGGEST}" target="_blank" rel="noopener">اقترح برومبت</a></header>
 <main>
 ${body}
 </main>
-<footer>${NAME} — ${TAGLINE} · مجاني ومفتوح المصدر (MIT) · <a href="${REPO}" rel="noopener">GitHub</a> · <a href="/rss.xml">RSS</a> · <a href="/about/">عن الموقع</a> · <a href="/privacy/">الخصوصية</a> · <a href="/api/">API</a> · <a href="${SUGGEST}" target="_blank" rel="noopener">اقترح برومبت</a></footer>
+<footer>${NAME} — ${TAGLINE} · مجاني ومفتوح المصدر (MIT) · <a href="${REPO}" rel="noopener">GitHub</a> · <a href="/rss.xml">RSS</a> · <a href="/tools/">الأدوات</a> · <a href="/faq/">الأسئلة</a> · <a href="/pitfalls/">أخطاء شائعة</a> · <a href="/about/">عن الموقع</a> · <a href="/privacy/">الخصوصية</a> · <a href="/api/">API</a> · <a href="${SUGGEST}" target="_blank" rel="noopener">اقترح برومبت</a></footer>
 </body>
 </html>`;
 
@@ -181,8 +181,11 @@ const ld = [{ '@context': 'https://schema.org', '@type': 'CollectionPage', name:
 write(`c/${slugOf(c)}/index.html`, page({ title, description, path: p, ld, body: `<div class="crumb"><a href="/">${NAME}</a></div><h1>${esc(c)}</h1><p class="lead">${esc(description)}</p><ul class="l">${list.map((d) => `<li><a href="${d.url}">${esc(d.title)}</a><small>${esc(d.kind)} — ${esc(clip(d.desc, 110))}</small></li>`).join('')}</ul>` }));
 }
 
+// ---------- الأدوات والأسئلة ----------
+const extraUrls = (await import('./extra-pages.mjs')).default({ page, write, esc, NAME, SITE, SUGGEST, DATA, ROOT });
+
 // ---------- ملفات الزواحف ----------
-const urls = ['/', '/api/', '/about/', '/privacy/', ...catNames.map((c) => `/c/${slugOf(c)}/`), ...DATA.map((d) => d.url)];
+const urls = ['/', '/api/', '/about/', '/privacy/', ...extraUrls, ...catNames.map((c) => `/c/${slugOf(c)}/`), ...DATA.map((d) => d.url)];
 write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((u) => `<url><loc>${SITE}${u}</loc><lastmod>${NOW}</lastmod><priority>${u === '/' ? '1.0' : u.startsWith('/c/') ? '0.7' : '0.6'}</priority></url>`).join('\n')}\n</urlset>\n`);
 write('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
 write('rss.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel><title>${NAME} — ${TAGLINE}</title><link>${SITE}/</link><description>${esc(homeDesc)}</description><language>ar</language>\n${DATA.slice(0, 50).map((d) => `<item><title>${esc(d.title)}</title><link>${SITE}${d.url}</link><guid>${SITE}${d.url}</guid><description>${esc(d.desc)}</description><category>${esc(d.cat)}</category></item>`).join('\n')}\n</channel></rss>\n`);
