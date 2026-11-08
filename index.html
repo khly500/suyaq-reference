@@ -141,10 +141,10 @@ kbd{font-family:var(--mono);font-size:11px;padding:1px 6px;border:1px solid var(
 <div class="app">
   <aside class="side" id="side"></aside>
   <section class="list">
-    <div class="lhead"><input id="flt" placeholder="تصفية القائمة…  ( / )" autocomplete="off"></div>
+    <div class="lhead"><input id="flt" placeholder="تصفية القائمة…  ( Alt + / )" autocomplete="off"></div>
     <div id="items"></div>
     <div class="hint">
-      <span><kbd>J</kbd><kbd>K</kbd> تنقل</span><span><kbd>C</kbd> نسخ</span><span><kbd>/</kbd> تصفية</span>
+      <span><kbd>Alt</kbd>+<kbd>J</kbd><kbd>K</kbd> تنقل</span><span><kbd>Alt</kbd>+<kbd>C</kbd> نسخ</span><span><kbd>Alt</kbd>+<kbd>/</kbd> تصفية</span>
     </div>
   </section>
   <article class="detail" id="detail"></article>
@@ -273,8 +273,8 @@ function buildDetail(){
 function exportText(d){
   const T=text(d);
   if(st.fmt==='messages')return JSON.stringify([{role:'user',content:T}],null,2);
-  if(st.fmt==='python')return `from openai import OpenAI\n\nclient = OpenAI()\nres = client.chat.completions.create(\n    model="gpt-4o",\n    messages=[{"role": "user", "content": ${JSON.stringify(T)}}],\n)\nprint(res.choices[0].message.content)`;
-  if(st.fmt==='claude')return ['import anthropic','','client = anthropic.Anthropic()','msg = client.messages.create(','    model="claude-sonnet-5-5",','    max_tokens=1024,','    messages=[{"role": "user", "content": '+JSON.stringify(T)+'}],',')','print(msg.content[0].text)'].join(String.fromCharCode(10));if(st.fmt==='gemini')return ['from google import genai','','client = genai.Client()','res = client.models.generate_content(','    model="gemini-2.5-flash",','    contents='+JSON.stringify(T)+',',')','print(res.text)'].join(String.fromCharCode(10));if(st.fmt==='curl'){const b=JSON.stringify({model:'gpt-4o',messages:[{role:'user',content:T}]},null,2).replace(/'/g,"'\\''");
+  if(st.fmt==='python')return `from openai import OpenAI\n\nclient = OpenAI()\nres = client.chat.completions.create(\n    model="gpt-6-luna",\n    messages=[{"role": "user", "content": ${JSON.stringify(T)}}],\n)\nprint(res.choices[0].message.content)`;
+  if(st.fmt==='claude')return ['import anthropic','','client = anthropic.Anthropic()','msg = client.messages.create(','    model="claude-sonnet-5-5",','    max_tokens=2048,','    messages=[{"role": "user", "content": '+JSON.stringify(T)+'}],',')','print(msg.content[0].text)'].join(String.fromCharCode(10));if(st.fmt==='gemini')return ['from google import genai','','client = genai.Client()','res = client.models.generate_content(','    model="gemini-3.8-flash",','    contents='+JSON.stringify(T)+',',')','print(res.text)'].join(String.fromCharCode(10));if(st.fmt==='curl'){const b=JSON.stringify({model:'gpt-6-luna',messages:[{role:'user',content:T}]},null,2).replace(/'/g,"'\\''");
     return `curl https://api.openai.com/v1/chat/completions \\\n  -H "Authorization: Bearer $OPENAI_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d '${b}'`}
   return T;
 }
@@ -331,11 +331,11 @@ addEventListener('keydown',e=>{
   if(!pal.hidden)return;
   const tag=document.activeElement.tagName;
   if(tag==='INPUT'||tag==='TEXTAREA'){if(e.key==='Escape')document.activeElement.blur();return}
-  if(e.code==='Slash'){e.preventDefault();$('flt').focus();return}
-  if(e.code==='KeyC'&&!e.ctrlKey&&!e.metaKey){copy();return}
+  if(e.altKey&&e.code==='Slash'){e.preventDefault();$('flt').focus();return}
+  if(e.altKey&&e.code==='KeyC'&&!e.ctrlKey&&!e.metaKey){copy();return}
   const L=visible(),i=L.findIndex(d=>d.id===st.sel);
-  if(e.code==='KeyJ'||e.key==='ArrowDown'){e.preventDefault();if(L[i+1])select(L[i+1].id)}
-  if(e.code==='KeyK'||e.key==='ArrowUp'){e.preventDefault();if(L[i-1])select(L[i-1].id)}
+  if((e.altKey&&e.code==='KeyJ')||e.key==='ArrowDown'){e.preventDefault();if(L[i+1])select(L[i+1].id)}
+  if((e.altKey&&e.code==='KeyK')||e.key==='ArrowUp'){e.preventDefault();if(L[i-1])select(L[i-1].id)}
 });
 
 (function init(){
