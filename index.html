@@ -186,11 +186,14 @@ mark{background:var(--sf-bg);color:inherit;border-radius:3px;padding:0 1px}
 .mbar{display:none}
 
 /* ========= التذييل والتنبيه ========= */
-.foot{border-top:1px solid var(--ln);padding:28px 24px 40px}
-.foot-in{max-width:1180px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;font-size:14px;color:var(--mu)}
-.foot-in a{color:var(--mu);text-decoration:none}.foot-in a:hover{color:var(--tx);text-decoration:underline;text-underline-offset:4px}
-.foot-in .own{margin-inline-end:auto;color:var(--fa)}
-#toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,14px);background:var(--tx);color:var(--bg);padding:10px 18px;border-radius:10px;font-weight:500;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:80}
+.foot{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);z-index:35;max-width:calc(100% - 20px);background:color-mix(in srgb,var(--s1) 92%,transparent);backdrop-filter:blur(12px);border:1px solid var(--ln2);border-radius:999px;box-shadow:var(--shadow);padding:4px}
+.foot-in{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;white-space:nowrap}
+.foot-in::-webkit-scrollbar{display:none}
+.foot-in a{color:var(--mu);text-decoration:none;font-size:13px;padding:5px 12px;border-radius:999px}
+.foot-in a:hover{color:var(--tx);background:var(--s2)}
+body{padding-bottom:64px}
+body.lock .foot{display:none}
+#toast{position:fixed;bottom:72px;left:50%;transform:translate(-50%,14px);background:var(--tx);color:var(--bg);padding:10px 18px;border-radius:10px;font-weight:500;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:80}
 #toast.s{opacity:1;transform:translate(-50%,0)}
 
 /* ========= الجوال ========= */
@@ -211,7 +214,7 @@ mark{background:var(--sf-bg);color:inherit;border-radius:3px;padding:0 1px}
   .mb{max-height:none}
   body.lock{overflow:hidden}
 }
-@media (max-width:520px){.top{gap:8px;padding:0 12px}.gh{padding:7px 9px}.sbox{height:54px}.hero h1{font-size:33px}}
+@media (max-width:520px){.foot{bottom:8px}.top{gap:8px;padding:0 12px}.gh{padding:7px 9px}.sbox{height:54px}.hero h1{font-size:33px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -256,7 +259,7 @@ mark{background:var(--sf-bg);color:inherit;border-radius:3px;padding:0 1px}
 </div>
 </main>
 
-<footer class="foot"><div class="foot-in"><span class="own">سِياق، مفتوح المصدر برخصة MIT</span><a href="/tools/">الأدوات</a><a href="/learn/">تعلّم</a><a href="/pitfalls/">أخطاء شائعة</a><a href="/faq/">الأسئلة</a><a href="/api/">API</a><a href="/about/">عن الموقع</a><a href="/privacy/">الخصوصية</a><a href="/rss.xml">RSS</a><a href="https://github.com/khly500/suyaq-reference/issues/new?template=prompt_suggestion.yml" target="_blank" rel="noopener">اقترح برومبت</a></div></footer>
+<footer class="foot" aria-label="روابط الموقع"><nav class="foot-in"><a href="/tools/">الأدوات</a><a href="/learn/">تعلّم</a><a href="/pitfalls/">أخطاء شائعة</a><a href="/faq/">الأسئلة</a><a href="/api/">API</a><a href="/about/">عن الموقع</a><a href="/privacy/">الخصوصية</a><a href="https://github.com/khly500/suyaq-reference/issues/new?template=prompt_suggestion.yml" target="_blank" rel="noopener">اقترح برومبت</a></nav></footer>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script src="data.js"></script>
