@@ -1,4 +1,4 @@
-// scripts/build-site.mjs — مولّد موقع ثابت لـ ai.skakh.com (بدون أي اعتماديات)
+// scripts/build-site.mjs — مولّد موقع ثابت لـ suyaq.com (بدون أي اعتماديات)
 // الاستخدام: node scripts/build-site.mjs   → ينتج مجلد dist/
 import fs from 'node:fs';
 import path from 'node:path';
@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(ROOT, 'dist');
-const SITE = 'https://ai.skakh.com';
+const SITE = 'https://suyaq.com';
 const NAME = 'سِياق';
 const TAGLINE = 'مرجع المطوّر العربي للذكاء الاصطناعي';
 const REPO = 'https://github.com/khly500/suyaq-reference';
