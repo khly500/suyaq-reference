@@ -4,7 +4,7 @@
   "description": "سِياق — مرجع المطوّر العربي للذكاء الاصطناعي: برومبتات وأكواد عربية جاهزة",
   "type": "module",
   "license": "MIT",
-  "homepage": "https://ai.skakh.com",
+  "homepage": "https://suyaq.com",
   "repository": { "type": "git", "url": "git+https://github.com/khly500/suyaq-reference.git" },
   "scripts": {
     "validate": "node scripts/validate-prompts.mjs",
