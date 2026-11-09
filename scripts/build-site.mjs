@@ -103,7 +103,7 @@ header .sp{flex:1}main{max-width:860px;margin:0 auto;padding:28px 20px 70px}
 .pill{display:inline-block;border:1px solid var(--bd);border-radius:999px;padding:1px 12px;font-size:13px;color:var(--mut);margin-inline-end:6px}
 .lead{color:var(--mut);margin:10px 0 18px}pre{background:var(--p1);border:1px solid var(--bd);border-radius:12px;padding:16px;overflow:auto;white-space:pre-wrap;word-break:break-word;font-family:var(--mono);font-size:14px;line-height:1.7;direction:auto;text-align:start}
 pre.ar,pre.ar code{font-family:inherit;font-size:15.5px;line-height:2}.btn{display:inline-flex;gap:8px;border:1px solid var(--bd);background:var(--p2);color:var(--tx);border-radius:10px;padding:8px 16px;font:inherit;cursor:pointer;margin:12px 8px 0 0}.btn.pri{background:var(--ac);color:var(--acink);border-color:var(--ac);font-weight:600}
-ul.l{list-style:none;padding:0}ul.l li{padding:10px 0;border-bottom:1px solid var(--bd)}ul.l small{color:var(--mut);display:block}footer{border-top:1px solid var(--bd);padding:22px 20px;color:var(--mut);text-align:center;font-size:14px}`;
+ul.l{list-style:none;padding:0}ul.l li{padding:10px 0;border-bottom:1px solid var(--bd)}ul.l small{color:var(--mut);display:block}footer{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);z-index:20;max-width:calc(100% - 20px);background:color-mix(in srgb,var(--p1) 92%,transparent);backdrop-filter:blur(12px);border:1px solid var(--bd);border-radius:999px;padding:4px;box-shadow:0 18px 40px -24px rgba(0,0,0,.6)}footer nav{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;white-space:nowrap}footer nav::-webkit-scrollbar{display:none}footer a{color:var(--mut);text-decoration:none!important;font-size:13px;padding:5px 12px;border-radius:999px}footer a:hover{color:var(--tx);background:var(--p2)}body{padding-bottom:70px}`;
 
 const FONT = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=IBM+Plex+Mono:wght@400&family=Reem+Kufi:wght@700&display=swap" rel="stylesheet">';
 const page = ({ title, description, path: p, type, ld, body }) => `<!doctype html>
@@ -119,7 +119,7 @@ ${FONT}
 <main>
 ${body}
 </main>
-<footer>${NAME} — ${TAGLINE} · مجاني ومفتوح المصدر (MIT) · <a href="${REPO}" rel="noopener">GitHub</a> · <a href="/rss.xml">RSS</a> · <a href="/tools/">الأدوات</a> · <a href="/faq/">الأسئلة</a> · <a href="/pitfalls/">أخطاء شائعة</a> · <a href="/learn/">تعلّم</a> · <a href="/about/">عن الموقع</a> · <a href="/privacy/">الخصوصية</a> · <a href="/api/">API</a> · <a href="${SUGGEST}" target="_blank" rel="noopener">اقترح برومبت</a></footer>
+<footer aria-label="روابط الموقع"><nav><a href="/">المكتبة</a><a href="/tools/">الأدوات</a><a href="/learn/">تعلّم</a><a href="/pitfalls/">أخطاء شائعة</a><a href="/faq/">الأسئلة</a><a href="/api/">API</a><a href="/about/">عن الموقع</a><a href="/privacy/">الخصوصية</a><a href="${SUGGEST}" target="_blank" rel="noopener">اقترح برومبت</a></nav></footer>
 </body>
 </html>`;
 
