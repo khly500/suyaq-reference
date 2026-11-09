@@ -114,7 +114,7 @@ ${FONT}
 <main>
 ${body}
 </main>
-<footer>${NAME} — ${TAGLINE} · مجاني ومفتوح المصدر (MIT) · <a href="${REPO}" rel="noopener">GitHub</a> · <a href="/rss.xml">RSS</a> · <a href="/tools/">الأدوات</a> · <a href="/faq/">الأسئلة</a> · <a href="/pitfalls/">أخطاء شائعة</a> · <a href="/about/">عن الموقع</a> · <a href="/privacy/">الخصوصية</a> · <a href="/api/">API</a> · <a href="${SUGGEST}" target="_blank" rel="noopener">اقترح برومبت</a></footer>
+<footer>${NAME} — ${TAGLINE} · مجاني ومفتوح المصدر (MIT) · <a href="${REPO}" rel="noopener">GitHub</a> · <a href="/rss.xml">RSS</a> · <a href="/tools/">الأدوات</a> · <a href="/faq/">الأسئلة</a> · <a href="/pitfalls/">أخطاء شائعة</a> · <a href="/learn/">تعلّم</a> · <a href="/about/">عن الموقع</a> · <a href="/privacy/">الخصوصية</a> · <a href="/api/">API</a> · <a href="${SUGGEST}" target="_blank" rel="noopener">اقترح برومبت</a></footer>
 </body>
 </html>`;
 
