@@ -16,7 +16,7 @@ jobs:
         run: |
           fail=0
           for u in / /about/ /privacy/ /p/pr-review/ /c/ai/ /api/v1/snippets.json /sitemap.xml /data.js; do
-            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 --retry 2 --retry-delay 5 "https://ai.skakh.com$u" || echo 000)
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 --retry 2 --retry-delay 5 "https://suyaq.com$u" || echo 000)
             echo "$u -> $code"
             if [ "$code" != "200" ]; then fail=1; echo "- $u => $code" >> "$RUNNER_TEMP/failed.txt"; fi
           done
@@ -27,7 +27,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           existing=$(gh issue list -R "$GITHUB_REPOSITORY" --label uptime --state open --json number --jq '.[0].number')
-          body="تعذّر الوصول لبعض صفحات ai.skakh.com:"$'\n\n'"$(cat "$RUNNER_TEMP/failed.txt")"$'\n\n'"$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          body="تعذّر الوصول لبعض صفحات suyaq.com:"$'\n\n'"$(cat "$RUNNER_TEMP/failed.txt")"$'\n\n'"$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
           if [ -z "$existing" ]; then
             gh label create uptime -R "$GITHUB_REPOSITORY" --color D93F0B 2>/dev/null || true
             gh issue create -R "$GITHUB_REPOSITORY" --title "⚠️ عطل في الموقع" --label uptime --body "$body"
