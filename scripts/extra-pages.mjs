@@ -110,6 +110,24 @@ var p=parseFloat($('p').value),n=parseFloat($('n').value)||0;$('cost').textConte
     body: `${crumb('أخطاء شائعة')}<h1>أخطاء شائعة يقع فيها المطور العربي</h1><p class="lead">أخطاء صغيرة تتكرر في أغلب المشاريع العربية، ولكل منها كود جاهز في المكتبة.</p>${pit.map(([t, d, ids]) => `<h2>${esc(t)}</h2><p class="lead">${esc(d)}${ids.filter(has).length ? ' الحل: ' + ids.filter(has).map((i) => link(i)).join('، ') + '.' : ' جرّب <a href="/tools/token-calculator/">حاسبة التوكنز</a>.'}</p>`).join('')}`,
   });
 
+  // ---------- تعلّم: قاموس مصطلحات (لا يُضاف مصطلح إلا بمصدر رسمي مقروء) ----------
+  const gl = [
+    ['النموذج اللغوي (LLM)',
+      'برنامج يتوقع الكلمة الجاية (أو جزء منها) بناءً على اللي قبلها. ومن هالتوقع المتكرر يطلع كلامه كله.',
+      [['Google — Machine Learning Crash Course: Large language models', 'https://developers.google.cn/machine-learning/crash-course/llm']]],
+    ['التوكن (Token)',
+      'أصغر قطعة يتعامل معها النموذج: ممكن تكون كلمة أو جزء كلمة أو حرف. في الإنجليزي التوكن الواحد تقريباً ٤ أحرف، أو ثلاثة أرباع كلمة. والنموذج يحسب النص ويحاسبك عليه بالتوكنز، مو بالكلمات.',
+      [['Google — Machine Learning Crash Course', 'https://developers.google.cn/machine-learning/crash-course/llm'], ['OpenAI Help — What are tokens and how to count them?', 'https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them']]],
+    ['ليش العربي يكلّف أكثر؟',
+      'التقطيع إلى توكنز يختلف من لغة لغة، والنص بلغة غير الإنجليزية ممكن يطلع توكنز أكثر لنفس المعنى، فتكلفة الـAPI تكون أعلى. تقدر تقدّر الفرق بنفسك من <a href="/tools/token-calculator/">حاسبة التوكنز</a>.',
+      [['OpenAI Help — What are tokens and how to count them?', 'https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them']]],
+  ];
+  add('/learn/', {
+    title: `قاموس الذكاء الاصطناعي بالعربي المبسّط | ${NAME}`,
+    description: 'شرح مبسّط بالعربي لمصطلحات الذكاء الاصطناعي، كل مصطلح له مصدر رسمي. نضيف مصطلحاً جديداً فقط بعد التأكد من مصدره.',
+    body: `${crumb('تعلّم')}<h1>قاموس الذكاء الاصطناعي</h1><p class="lead">شرح مبسّط، وكل تعريف تحته مصدره. ما نضيف مصطلحاً إلا بعد ما نقرأ مصدره الرسمي، والقاموس يكبر مع الوقت.</p>${gl.map(([t, d, src]) => `<h2>${t}</h2><p class="lead">${d}</p><p>المصدر: ${src.map(([n, u]) => `<a href="${u}" rel="noopener" target="_blank">${esc(n)}</a>`).join(' · ')}</p>`).join('')}`,
+  });
+
   // ---------- قبل وبعد: تُنشأ فقط إذا وُجدت أمثلة حقيقية من تشغيل نموذج ----------
   const exFile = path.join(ROOT, 'content', 'examples.json');
   if (fs.existsSync(exFile)) {
