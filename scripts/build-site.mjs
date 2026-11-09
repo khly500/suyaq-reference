@@ -51,7 +51,8 @@ const head = ({ title, description, path: p, type = 'website', ld = [] }) => `<m
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${SITE}${p}">
 <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large">
-<meta name="theme-color" content="#0d1117">
+<meta name="theme-color" content="#0F1714" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F5F7F5" media="(prefers-color-scheme: light)">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="alternate" type="application/rss+xml" title="${NAME}" href="/rss.xml">
@@ -90,28 +91,31 @@ write('index.html', app);
 fs.copyFileSync(path.join(ROOT, 'data.js'), path.join(DIST, 'data.js'));
 
 // ---------- قالب الصفحات الفرعية ----------
-const CSS = `:root{--bg:#0d1117;--p1:#161b22;--p2:#1c2230;--bd:#30363d;--tx:#f0f3f6;--mut:#9198a1;--ac:#4ade9e;--gold:#d6b872;--mono:'JetBrains Mono',ui-monospace,Consolas,monospace}
+const CSS = `:root{--bg:#0F1714;--p1:#151F1B;--p2:#1B2722;--bd:#283731;--tx:#E9EEEA;--mut:#A3B3AC;--ac:#46B98E;--acink:#06140E;--gold:#E0A63E;--mono:'IBM Plex Mono','IBM Plex Sans Arabic',ui-monospace,Consolas,monospace;color-scheme:dark}
+@media (prefers-color-scheme:light){:root:not([data-theme=dark]){--bg:#F5F7F5;--p1:#FFFFFF;--p2:#EEF2EF;--bd:#DCE3DF;--tx:#13201A;--mut:#4A5A52;--ac:#1A6E4E;--acink:#FFFFFF;--gold:#8A5400;color-scheme:light}}
+:root[data-theme=light]{--bg:#F5F7F5;--p1:#FFFFFF;--p2:#EEF2EF;--bd:#DCE3DF;--tx:#13201A;--mut:#4A5A52;--ac:#1A6E4E;--acink:#FFFFFF;--gold:#8A5400;color-scheme:light}
 *{box-sizing:border-box;margin:0}body{font-family:'IBM Plex Sans Arabic','Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--tx);line-height:1.8;font-size:16px}
 a{color:var(--ac);text-decoration:none}a:hover{text-decoration:underline}main a:not(.btn),footer a{text-decoration:underline;text-underline-offset:3px}
-header{display:flex;flex-wrap:wrap;row-gap:6px;gap:16px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--bd)}header .logo{font-weight:700;font-size:18px;color:var(--tx);display:flex;gap:10px;align-items:center}
-.mark{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:linear-gradient(135deg,var(--ac),#1f9d6a);color:#04140c;font-weight:700}
+header{display:flex;flex-wrap:wrap;row-gap:6px;gap:16px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--bd)}header .logo{font-family:'Reem Kufi','IBM Plex Sans Arabic',sans-serif;font-weight:700;font-size:21px;color:var(--tx);display:flex;gap:10px;align-items:center;text-decoration:none!important}
+.mark{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:var(--ac);color:var(--acink);font-family:'Reem Kufi',sans-serif;font-weight:700;font-size:16px;line-height:1}
 header .sp{flex:1}main{max-width:860px;margin:0 auto;padding:28px 20px 70px}
 .crumb{color:var(--mut);font-size:14px;margin-bottom:10px}h1{font-size:28px;line-height:1.4;margin-bottom:8px}h2{font-size:19px;margin:30px 0 10px}
 .pill{display:inline-block;border:1px solid var(--bd);border-radius:999px;padding:1px 12px;font-size:13px;color:var(--mut);margin-inline-end:6px}
 .lead{color:var(--mut);margin:10px 0 18px}pre{background:var(--p1);border:1px solid var(--bd);border-radius:12px;padding:16px;overflow:auto;white-space:pre-wrap;word-break:break-word;font-family:var(--mono);font-size:14px;line-height:1.7;direction:auto;text-align:start}
-pre.ar{font-family:inherit;font-size:15.5px}.btn{display:inline-flex;gap:8px;border:1px solid var(--bd);background:var(--p2);color:var(--tx);border-radius:10px;padding:8px 16px;font:inherit;cursor:pointer;margin:12px 8px 0 0}.btn.pri{background:var(--ac);color:#04140c;border-color:var(--ac);font-weight:600}
+pre.ar,pre.ar code{font-family:inherit;font-size:15.5px;line-height:2}.btn{display:inline-flex;gap:8px;border:1px solid var(--bd);background:var(--p2);color:var(--tx);border-radius:10px;padding:8px 16px;font:inherit;cursor:pointer;margin:12px 8px 0 0}.btn.pri{background:var(--ac);color:var(--acink);border-color:var(--ac);font-weight:600}
 ul.l{list-style:none;padding:0}ul.l li{padding:10px 0;border-bottom:1px solid var(--bd)}ul.l small{color:var(--mut);display:block}footer{border-top:1px solid var(--bd);padding:22px 20px;color:var(--mut);text-align:center;font-size:14px}`;
 
-const FONT = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">';
+const FONT = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=IBM+Plex+Mono:wght@400&family=Reem+Kufi:wght@700&display=swap" rel="stylesheet">';
 const page = ({ title, description, path: p, type, ld, body }) => `<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
 ${head({ title, description, path: p, type, ld })}
+<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
 ${FONT}
 <style>${CSS}</style>
 </head>
 <body>
-<header><a class="logo" href="/"><span class="mark">س</span>${NAME}</a><span class="sp"></span><a href="/">المكتبة</a><a href="/tools/">الأدوات</a><a href="/faq/">الأسئلة</a><a href="${REPO}" rel="noopener">GitHub</a><a href="${SUGGEST}" target="_blank" rel="noopener">اقترح برومبت</a></header>
+<header><a class="logo" href="/"><span class="mark" aria-hidden="true">س</span>${NAME}</a><span class="sp"></span><a href="/">المكتبة</a><a href="/tools/">الأدوات</a><a href="/learn/">تعلّم</a><a href="/faq/">الأسئلة</a><a href="${REPO}" rel="noopener">GitHub</a><a href="${SUGGEST}" target="_blank" rel="noopener">اقترح برومبت</a></header>
 <main>
 ${body}
 </main>
