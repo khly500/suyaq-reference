@@ -121,6 +121,12 @@ var p=parseFloat($('p').value),n=parseFloat($('n').value)||0;$('cost').textConte
     ['ليش العربي يكلّف أكثر؟',
       'التقطيع إلى توكنز يختلف من لغة لغة، والنص بلغة غير الإنجليزية ممكن يطلع توكنز أكثر لنفس المعنى، فتكلفة الـAPI تكون أعلى. تقدر تقدّر الفرق بنفسك من <a href="/tools/token-calculator/">حاسبة التوكنز</a>.',
       [['OpenAI Help — What are tokens and how to count them?', 'https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them']]],
+    ['الهلوسة (Hallucination)',
+      'لما النموذج يكتب كلام غلط في الوقائع، أو كلام يتعارض مع المعلومات اللي أعطيته. من طرق التخفيف: خلّه يقدر يقول «ما أعرف»، واطلب منه اقتباساً مباشراً من النص، وتحقق من المصادر.',
+      [['Anthropic Docs — Reduce hallucinations', 'https://platform.claude.com/docs/claude/docs/minimizing-hallucinations']]],
+    ['سير العمل مقابل الوكيل (Workflow / Agent)',
+      'في سير العمل خطواتك مكتوبة مسبقاً بالكود والنموذج يمشي عليها. وفي الوكيل النموذج هو اللي يقرر خطواته واستخدامه للأدوات بنفسه. للمهام الواضحة اللي تبي فيها ثبات اختر سير العمل، وللمهام المفتوحة اختر الوكيل. والنصيحة: ابدأ بأبسط حل، ولا تزيد التعقيد إلا لو حسّن النتيجة فعلاً، لأن الوكلاء غالباً أبطأ وأغلى.',
+      [['Anthropic — Building effective agents', 'https://www.anthropic.com/research/building-effective-agents']]],
   ];
   add('/learn/', {
     title: `قاموس الذكاء الاصطناعي بالعربي المبسّط | ${NAME}`,
