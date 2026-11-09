@@ -177,7 +177,8 @@ for (const c of catNames) {
 const list = byCat[c];
 const p = `/c/${slugOf(c)}/`;
 const title = `${c} — برومبتات وأكواد عربية جاهزة | ${NAME}`;
-const description = clip(`${list.length} عنصراً في تصنيف «${c}»: ${list.slice(0, 4).map((d) => d.title).join('، ')} وغيرها، جاهزة للنسخ.`, 158);
+const cnt = list.length === 1 ? 'عنصر واحد' : list.length === 2 ? 'عنصران' : list.length <= 10 ? `${list.length} عناصر` : `${list.length} عنصراً`;
+const description = clip(`${cnt} في تصنيف «${c}»: ${list.slice(0, 4).map((d) => d.title).join('، ')}${list.length > 4 ? ' وغيرها' : ''}، جاهزة للنسخ.`, 158);
 const ld = [{ '@context': 'https://schema.org', '@type': 'CollectionPage', name: c, url: SITE + p, inLanguage: 'ar', mainEntity: { '@type': 'ItemList', itemListElement: list.map((d, i) => ({ '@type': 'ListItem', position: i + 1, url: SITE + d.url, name: d.title })) } }];
 write(`c/${slugOf(c)}/index.html`, page({ title, description, path: p, ld, body: `<div class="crumb"><a href="/">${NAME}</a></div><h1>${esc(c)}</h1><p class="lead">${esc(description)}</p><ul class="l">${list.map((d) => `<li><a href="${d.url}">${esc(d.title)}</a><small>${esc(d.kind)} — ${esc(clip(d.desc, 110))}</small></li>`).join('')}</ul>` }));
 }
