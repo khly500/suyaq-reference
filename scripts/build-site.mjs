@@ -77,12 +77,12 @@ let app = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').replace(/^\uFEF
 const homeTitle = `${NAME} — ${TAGLINE}`;
 const homeDesc = `${DATA.length} برومبتاً وكوداً عربياً جاهزاً للنسخ والتجربة: مراجعة كود، تلخيص، لهجات، SQL، معالجة النص العربي وأكثر. مجاناً ومفتوح المصدر.`;
 const homeLd = [
-{ '@context': 'https://schema.org', '@type': 'WebSite', name: NAME, alternateName: 'Suyaq', url: SITE + '/', inLanguage: 'ar', description: homeDesc, publisher: { '@type': 'Person', name: 'Khalil Alshamardal' } },
+{ '@context': 'https://schema.org', '@type': 'WebSite', name: NAME, alternateName: ['Suyaq', 'سياق', 'سياق AI'], url: SITE + '/', inLanguage: 'ar', description: homeDesc, publisher: { '@type': 'Person', name: 'Khalil Alshamardal' } },
 { '@context': 'https://schema.org', '@type': 'CollectionPage', name: homeTitle, url: SITE + '/', inLanguage: 'ar', hasPart: DATA.slice(0, 20).map((d) => ({ '@type': 'CreativeWork', name: d.title, url: SITE + d.url })) },
 ];
 app = app.replace(/<meta charset="utf-8">\s*<meta name="viewport"[^>]*>\s*<title>[\s\S]*?<meta name="description"[^>]*>/, head({ title: homeTitle, description: homeDesc, path: '/', ld: homeLd }));
 app = app.replace('href="https://github.com/khly500/suyaq-ai"', `href="${REPO}"`);
-app = app.replace('<div class="logo"><div class="mark">س</div>سِياق</div>', `<h1 class="logo" style="position:relative"><span class="mark">س</span>${NAME}<span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"> — ${TAGLINE}</span></h1>`);
+app = app.replace('<div class="logo"><div class="mark">س</div>سِياق</div>', `<div class="logo"><div class="mark" aria-hidden="true">س</div>${NAME}</div>`);
 const index = `<noscript><main style="padding:24px;max-width:860px;margin:auto;overflow:auto;height:100vh"><h2>${NAME} — ${TAGLINE}</h2><p>${esc(homeDesc)}</p>${catNames.map((c) => `<h3><a href="/c/${slugOf(c)}/">${esc(c)}</a></h3><ul>${byCat[c].map((d) => `<li><a href="${d.url}">${esc(d.title)}</a></li>`).join('')}</ul>`).join('')}</main></noscript>\n<nav aria-label="فهرس المكتبة" hidden>${DATA.map((d) => `<a href="${d.url}">${esc(d.title)}</a>`).join(' ')}</nav>\n`;
 app = app.replace('<script src="data.js"></script>', index + '<script src="/data.js?v=' + DATA.length + '-' + fs.statSync(path.join(ROOT, 'data.js')).size + '"></script>');
 write('index.html', app);
@@ -123,7 +123,7 @@ for (const d of DATA) {
 const related = DATA.filter((x) => x.cat === d.cat && x.id !== d.id).slice(0, 6);
 const isP = d.type === 'prompt';
 const vars = isP ? [...new Set([...d.body.matchAll(/\{\{(.+?)\}\}/g)].map((m) => m[1]))] : [];
-const title = `${d.title} — ${isP ? 'برومبت عربي جاهز' : `كود ${d.lang} جاهز`} | ${NAME}`;
+const title = d.title.length > 40 ? `${d.title} | ${NAME}` : `${d.title} — ${isP ? 'برومبت عربي جاهز' : `كود ${d.lang} جاهز`} | ${NAME}`;
 const description = clip(`${d.title}: ${isP ? 'برومبت عربي جاهز للنسخ والتجربة. ' : `كود ${d.lang} جاهز للنسخ. `}${d.desc}`, 158);
 const ld = [
 { '@context': 'https://schema.org', '@type': isP ? 'CreativeWork' : 'SoftwareSourceCode', name: d.title, description: d.desc, inLanguage: 'ar', url: SITE + d.url, genre: d.cat, ...(isP ? { text: d.body } : { programmingLanguage: d.lang, codeSampleType: 'snippet', text: d.body }), isPartOf: { '@type': 'WebSite', name: NAME, url: SITE + '/' }, author: { '@type': 'Person', name: 'Khalil Alshamardal' }, license: 'https://opensource.org/licenses/MIT' },
@@ -197,5 +197,23 @@ const src = path.join(ROOT, 'public', f);
 if (fs.existsSync(src)) write(f, fs.readFileSync(src, 'utf8').replace(/^\uFEFF/, ''));
 }
 fs.copyFileSync(path.join(ROOT, 'public', 'og.png'), path.join(DIST, 'og.png'));
-write('_redirects', Object.entries(REMOVED).flatMap(([a, b]) => ['/p/' + a + ' /p/' + b + '/ 301', '/p/' + a + '/ /p/' + b + '/ 301']).join(String.fromCharCode(10)) + String.fromCharCode(10)); write('_headers', `/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Frame-Options: DENY\n  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()\n  Strict-Transport-Security: max-age=15552000\n  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'\n/data.js\n  Content-Type: text/javascript; charset=utf-8\n  Cache-Control: public, max-age=0, must-revalidate\n/api/*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=3600\n/p/*\n  Cache-Control: public, max-age=3600\n`);
+// favicon.ico: ملف ICO يحتوي صورة PNG 32×32 (المصدر نص base64 في public لأن المستودع يُحرَّر نصياً)
+{
+  const png = Buffer.from(fs.readFileSync(path.join(ROOT, 'public', 'favicon-32.png.b64'), 'utf8').trim(), 'base64');
+  const ico = Buffer.alloc(22);
+  ico.writeUInt16LE(0, 0); ico.writeUInt16LE(1, 2); ico.writeUInt16LE(1, 4);
+  ico.writeUInt8(32, 6); ico.writeUInt8(32, 7); ico.writeUInt8(0, 8); ico.writeUInt8(0, 9);
+  ico.writeUInt16LE(1, 10); ico.writeUInt16LE(32, 12); ico.writeUInt32LE(png.length, 14); ico.writeUInt32LE(22, 18);
+  fs.writeFileSync(path.join(DIST, 'favicon.ico'), Buffer.concat([ico, png]));
+}
+// security.txt (RFC 9116)
+write('.well-known/security.txt', [
+  `Contact: ${REPO}/security/advisories/new`,
+  `Expires: ${new Date(Date.now() + 300 * 864e5).toISOString().replace(/\.\d+Z$/, 'Z')}`,
+  'Preferred-Languages: ar, en',
+  `Canonical: ${SITE}/.well-known/security.txt`,
+  `Policy: ${REPO}/blob/main/SECURITY.md`,
+  '',
+].join('\n'));
+write('_redirects', Object.entries(REMOVED).flatMap(([a, b]) => ['/p/' + a + ' /p/' + b + '/ 301', '/p/' + a + '/ /p/' + b + '/ 301']).join(String.fromCharCode(10)) + String.fromCharCode(10)); write('_headers', `/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Frame-Options: DENY\n  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()\n  Strict-Transport-Security: max-age=31536000\n  Cross-Origin-Opener-Policy: same-origin\n  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'\n/data.js\n  Content-Type: text/javascript; charset=utf-8\n  Cache-Control: public, max-age=0, must-revalidate\n/api/*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=3600\n/p/*\n  Cache-Control: public, max-age=3600\nhttps://:project.pages.dev/*\n  X-Robots-Tag: noindex\nhttps://:version.:project.pages.dev/*\n  X-Robots-Tag: noindex\n`);
 console.log(`✅ ${DATA.length} عنصر → ${DATA.length} صفحة + ${catNames.length} تصنيف + sitemap/robots/rss/404 → dist/`);
