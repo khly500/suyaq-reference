@@ -71,6 +71,27 @@ for (const must of ['index.html', '404.html', 'data.js', 'robots.txt', '_headers
 if (files.length > 15000) errors.push(`عدد الملفات (${files.length}) يقترب من حد Cloudflare Pages (20000)`);
 for (const f of files) if (fs.statSync(f).size > 20 * 1024 * 1024) errors.push(`ملف كبير جداً: ${f}`);
 
+// الأمان: كل سكربت مضمّن يجب أن تكون بصمته في CSP، ولا 'unsafe-inline' في script-src، ولا معالجات أحداث داخل HTML
+{
+  const hdr = fs.existsSync(path.join(D, '_headers')) ? fs.readFileSync(path.join(D, '_headers'), 'utf8') : '';
+  const csp = (hdr.match(/^\s*Content-Security-Policy:\s*(.+)$/m) || [])[1] || '';
+  const scriptSrc = (csp.match(/script-src([^;]*)/) || [])[1] || '';
+  if (!csp) errors.push('ترويسة CSP مفقودة في _headers');
+  if (/'unsafe-inline'/.test(scriptSrc)) errors.push("script-src يحتوي 'unsafe-inline'");
+  if (csp.length > 1900) errors.push(`سطر CSP طويل (${csp.length}) — حد Cloudflare 2000 حرف`);
+  const { createHash } = await import('node:crypto');
+  for (const f of html) {
+    const s = fs.readFileSync(f, 'utf8');
+    for (const m of s.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
+      if (/\bsrc\s*=/i.test(m[1]) || /ld\+json/i.test(m[1]) || !m[2].trim()) continue;
+      const h = `'sha256-${createHash('sha256').update(m[2], 'utf8').digest('base64')}'`;
+      if (!scriptSrc.includes(h)) errors.push(`سكربت مضمّن بلا بصمة في CSP: ${f}`);
+    }
+    if (/<[a-z][^>]*\son[a-z]+\s*=/i.test(s)) errors.push(`معالج أحداث داخل HTML (يُمنع بـ CSP): ${f}`);
+    if (/href\s*=\s*["']\s*javascript:/i.test(s)) errors.push(`رابط javascript: في ${f}`);
+  }
+}
+
 // المحتوى: لا قوالب غير مستبدلة ولا undefined ظاهرة في الصفحات
 for (const f of html) {
   const s = fs.readFileSync(f, 'utf8');
