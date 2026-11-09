@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
+import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -215,5 +216,22 @@ write('.well-known/security.txt', [
   `Policy: ${REPO}/blob/main/SECURITY.md`,
   '',
 ].join('\n'));
-write('_redirects', Object.entries(REMOVED).flatMap(([a, b]) => ['/p/' + a + ' /p/' + b + '/ 301', '/p/' + a + '/ /p/' + b + '/ 301']).join(String.fromCharCode(10)) + String.fromCharCode(10)); write('_headers', `/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Frame-Options: DENY\n  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()\n  Strict-Transport-Security: max-age=31536000\n  Cross-Origin-Opener-Policy: same-origin\n  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'\n/data.js\n  Content-Type: text/javascript; charset=utf-8\n  Cache-Control: public, max-age=0, must-revalidate\n/api/*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=3600\n/p/*\n  Cache-Control: public, max-age=3600\nhttps://:project.pages.dev/*\n  X-Robots-Tag: noindex\nhttps://:version.:project.pages.dev/*\n  X-Robots-Tag: noindex\n`);
+// CSP بالبصمات: نحسب sha256 لكل سكربت مضمّن (غير JSON-LD) في كل صفحات dist، فلا نحتاج 'unsafe-inline' للسكربتات
+const scriptHashes = (() => {
+  const set = new Set();
+  (function walk(d) {
+    for (const f of fs.readdirSync(d)) {
+      const p = path.join(d, f);
+      if (fs.statSync(p).isDirectory()) walk(p);
+      else if (p.endsWith('.html')) {
+        for (const m of fs.readFileSync(p, 'utf8').matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
+          if (/\bsrc\s*=/i.test(m[1]) || /ld\+json/i.test(m[1]) || !m[2].trim()) continue;
+          set.add(`'sha256-${crypto.createHash('sha256').update(m[2], 'utf8').digest('base64')}'`);
+        }
+      }
+    }
+  })(DIST);
+  return [...set].sort().join(' ');
+})();
+write('_redirects', Object.entries(REMOVED).flatMap(([a, b]) => ['/p/' + a + ' /p/' + b + '/ 301', '/p/' + a + '/ /p/' + b + '/ 301']).join(String.fromCharCode(10)) + String.fromCharCode(10)); write('_headers', `/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Frame-Options: DENY\n  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()\n  Strict-Transport-Security: max-age=31536000\n  Cross-Origin-Opener-Policy: same-origin\n  Content-Security-Policy: default-src 'self'; script-src 'self' ${scriptHashes} https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'\n/data.js\n  Content-Type: text/javascript; charset=utf-8\n  Cache-Control: public, max-age=0, must-revalidate\n/api/*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=3600\n/p/*\n  Cache-Control: public, max-age=3600\nhttps://:project.pages.dev/*\n  X-Robots-Tag: noindex\nhttps://:version.:project.pages.dev/*\n  X-Robots-Tag: noindex\n`);
 console.log(`✅ ${DATA.length} عنصر → ${DATA.length} صفحة + ${catNames.length} تصنيف + sitemap/robots/rss/404 → dist/`);
