@@ -21,6 +21,9 @@ data.forEach((it, i) => {
   if (!['prompt', 'code'].includes(it.type)) errors.push(`${at}: type غير صالح`);
   if (it.type === 'code' && !it.lang) errors.push(`${at}: lang مفقود`);
   if (it.title && it.title.length > 60) warnings.push(`${at}: العنوان طويل (${it.title.length})`);
+  // الحقول التي تظهر كنص عادي: لا وسوم ولا روابط javascript ولا معالجات أحداث (الكود في body مسموح لأنه يُعرض كنص)
+  for (const k of ['title', 'cat', 'desc', 'lang']) if (it[k] != null && /<|>|javascript:|\son[a-z]+\s*=/i.test(String(it[k]))) errors.push(`${at}: الحقل ${k} فيه وسوم أو كود غير مسموح`);
+  if (it.cat && it.cat.length > 30) errors.push(`${at}: اسم التصنيف طويل`);
 });
 console.log(`فحص ${data.length} عنصراً…`);
 warnings.forEach((w) => console.warn('⚠️', w));
