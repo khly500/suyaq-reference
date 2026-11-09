@@ -57,7 +57,7 @@ const smPath = path.join(D, 'sitemap.xml');
 if (!fs.existsSync(smPath)) errors.push('sitemap.xml غير موجود');
 else {
   const sm = fs.readFileSync(smPath, 'utf8');
-  const urls = [...sm.matchAll(/<loc>https:\/\/ai\.skakh\.com([^<]*)<\/loc>/g)].map((m) => m[1]);
+  const urls = [...sm.matchAll(/<loc>https:\/\/suyaq\.com([^<]*)<\/loc>/g)].map((m) => m[1]);
   if (urls.length < 100) errors.push(`عدد روابط sitemap غير منطقي: ${urls.length}`);
   for (const u of urls) if (!exists(u)) errors.push(`sitemap يشير لصفحة غير موجودة: ${u}`);
 }
