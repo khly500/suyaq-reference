@@ -29,7 +29,7 @@ button{cursor:pointer;background:none;border:0}
 *{scrollbar-width:thin;scrollbar-color:#30363d transparent}
 
 .top{height:54px;flex:none;display:flex;align-items:center;gap:14px;padding:0 18px;border-bottom:1px solid var(--bd);background:rgba(13,17,23,.92);backdrop-filter:blur(10px);position:relative}
-.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;letter-spacing:.2px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px}
 .mark{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:linear-gradient(135deg,var(--ac),#1f9d6a);color:#04140c;font-weight:700;font-size:15px}
 .sp{flex:1}
 .kbtn{display:flex;align-items:center;gap:10px;min-width:260px;padding:7px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--p1);color:var(--mut);transition:.15s}
@@ -46,7 +46,7 @@ kbd{font-family:var(--mono);font-size:11px;padding:1px 6px;border:1px solid var(
 .tnav a:hover,.tnav a.on{color:var(--tx);background:var(--p1)}
 .drawer{position:fixed;inset:54px 0 0 0;z-index:30;background:var(--bg);overflow:auto;padding:6px 18px 40px}
 .drawer[hidden]{display:none}
-.drawer h4{color:var(--mut);font-size:12px;font-weight:500;margin:16px 0 2px;letter-spacing:.4px}
+.drawer h4{color:var(--mut);font-size:12px;font-weight:500;margin:16px 0 2px}
 .drawer a,.drawer button{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:start;padding:13px 4px;border:0;border-bottom:1px solid var(--bd);font-size:16px;color:var(--tx);text-decoration:none;background:none}
 .drawer .on{color:var(--ac)}
 .drawer span{color:var(--mut);font-family:var(--mono);font-size:13px}
@@ -60,7 +60,7 @@ kbd{font-family:var(--mono);font-size:11px;padding:1px 6px;border:1px solid var(
 .side,.list,.detail{overflow:auto;min-height:0}
 .side{border-inline-end:1px solid var(--bd);padding:18px 12px;background:var(--p1)}
 .list{border-inline-end:1px solid var(--bd);display:flex;flex-direction:column}
-.sh{font-size:11.5px;color:var(--dim);padding:14px 10px 6px;letter-spacing:.5px}
+.sh{font-size:11.5px;color:var(--dim);padding:14px 10px 6px}
 .nav{display:flex;align-items:center;gap:9px;width:100%;padding:7px 10px;border-radius:8px;color:var(--mut);text-align:start;transition:.12s}
 .nav:hover{background:var(--p2);color:var(--tx)}
 .nav.on{background:var(--p3);color:var(--tx)}
@@ -90,13 +90,13 @@ kbd{font-family:var(--mono);font-size:11px;padding:1px 6px;border:1px solid var(
 .crumb{font-size:12.5px;color:var(--dim);margin-bottom:10px}
 .crumb b{color:var(--mut);font-weight:500}
 .dh{display:flex;align-items:flex-start;gap:12px}
-.dh h1{font-size:28px;font-weight:700;letter-spacing:-.2px;line-height:1.35}
+.dh h2{font-size:28px;font-weight:700;line-height:1.35}
 .star{margin-inline-start:auto;padding:7px 11px;border:1px solid var(--bd);border-radius:9px;color:var(--mut);transition:.15s;white-space:nowrap}
 .star:hover{border-color:var(--bd2);color:var(--tx)}
 .star.on{color:var(--gold);border-color:rgba(214,184,114,.35);background:rgba(214,184,114,.06)}
 .desc{color:var(--mut);margin:6px 0 14px;max-width:62ch}
 .meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px}
-.vh{font-size:12px;color:var(--dim);margin:0 0 10px;letter-spacing:.4px}
+.vh{font-size:12px;color:var(--dim);margin:0 0 10px}
 .vars{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:26px}
 .f label{display:block;font-size:12.5px;color:var(--mut);margin-bottom:4px}
 .f textarea{width:100%;resize:vertical;min-height:40px;background:var(--p1);border:1px solid var(--bd);border-radius:9px;padding:8px 12px;outline:0;transition:.15s}
@@ -160,7 +160,7 @@ kbd{font-family:var(--mono);font-size:11px;padding:1px 6px;border:1px solid var(
   <a class="lnk" href="https://github.com/khly500/suyaq-ai" target="_blank" rel="noopener">GitHub</a><a class="lnk sg" href="https://github.com/khly500/suyaq-reference/issues/new?template=prompt_suggestion.yml" target="_blank" rel="noopener">اقترح برومبت</a>
 </header>
 <div class="drawer" id="drawer" hidden></div>
-<section class="intro"><div><h1>مرجع المطوّر العربي <em>للذكاء الاصطناعي</em></h1><p>برومبتات وأكواد عربية جاهزة للنسخ والتجربة، مع أمثلة API لـ OpenAI وClaude وGemini. مجاني ومفتوح المصدر.</p></div><div class="stats" id="stats"></div></section>
+<section class="intro" aria-label="تعريف بالموقع"><div><h1>مرجع المطوّر العربي <em>للذكاء الاصطناعي</em></h1><p>برومبتات وأكواد عربية جاهزة للنسخ والتجربة، مع أمثلة API لـ OpenAI وClaude وGemini. مجاني ومفتوح المصدر.</p></div><div class="stats" id="stats"></div></section>
 
 <div class="app" role="main">
   <aside class="side" id="side"></aside>
@@ -186,7 +186,7 @@ kbd{font-family:var(--mono);font-size:11px;padding:1px 6px;border:1px solid var(
 <script>
 const $=id=>document.getElementById(id);
 const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const norm=s=>s.replace(/[\u064B-\u0652\u0640]/g,'').replace(/[إأآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').toLowerCase();
+const norm=s=>s.replace(/[\u0660-\u0669]/g,c=>c.charCodeAt(0)-0x660).replace(/[\u06F0-\u06F9]/g,c=>c.charCodeAt(0)-0x6F0).replace(/[\u064B-\u0652\u0640\u0670]/g,'').replace(/[إأآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').toLowerCase();
 const toast=m=>{const t=$('toast');t.textContent=m;t.className='s';clearTimeout(toast.t);toast.t=setTimeout(()=>t.className='',1500)};
 
 DATA.forEach(d=>{d.desc=d.desc||(d.type==='prompt'?((ls)=>ls.find(x=>!/^أنت /.test(x))||ls[0])(d.body.split(String.fromCharCode(10)).map(x=>x.trim()).filter(Boolean)).split('\n')[0]:d.lang+' · '+d.title)});
@@ -264,7 +264,7 @@ function buildDetail(){
   const back=mk('button','back','→ رجوع');back.onclick=()=>el.classList.remove('open');
   const crumb=mk('div','crumb');crumb.innerHTML='المكتبة / <b></b> / '+'<b></b>';
   crumb.children[0].textContent=TYPES[d.type];crumb.children[1].textContent=d.cat;
-  const dh=mk('div','dh');dh.append(mk('h1',null,d.title));
+  const dh=mk('div','dh');dh.append(mk('h2',null,d.title));
   const star=mk('button','star'+(st.fav.includes(d.id)?' on':''),st.fav.includes(d.id)?'★ محفوظ':'☆ حفظ');
   star.onclick=()=>{st.fav=st.fav.includes(d.id)?st.fav.filter(x=>x!==d.id):[...st.fav,d.id];
     saveFav(st.fav);star.className='star'+(st.fav.includes(d.id)?' on':'');
