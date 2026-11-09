@@ -3,7 +3,7 @@
 **مرجع المطوّر العربي للذكاء الاصطناعي** — 153 برومبتاً و53 كوداً عربياً جاهزة للنسخ والتجربة.
 *An Arabic developer reference: ready-to-use prompts and code snippets.*
 
-**الموقع:** https://ai.skakh.com · **الترخيص:** MIT
+**الموقع:** https://suyaq.com · **الترخيص:** MIT
 
 ![سِياق](screenshot.png)
 
